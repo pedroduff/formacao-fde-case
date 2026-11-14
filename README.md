@@ -8,9 +8,24 @@ A solução de referência dos instrutores não faz parte deste repositório.
 
 ## Antes de tudo: prepare a sua máquina
 
-Siga o [SETUP.md](SETUP.md). Ele explica, passo a passo, como instalar o Git, criar a conta no GitHub, instalar e conectar o GitHub CLI (`gh`), instalar o Claude Code, o uv e o Python 3.12, no macOS ou no Windows (com WSL 2).
+O caminho principal é deixar o Claude Code configurar a máquina com você, pela skill `setup-fde` deste repositório:
 
-No fim, rode o verificador, que diz o que está pronto e o que falta:
+1. Instale o Claude Code (no Windows, dentro do Ubuntu do WSL 2):
+
+   ```bash
+   curl -fsSL https://claude.ai/install.sh | bash
+   ```
+
+2. Entre com a sua conta: rode `claude` e siga as instruções na tela.
+3. Com o Claude Code aberto na pasta do case, peça:
+
+   ```
+   configura o meu setup de FDE
+   ```
+
+A skill só aparece numa sessão aberta dentro da pasta `formacao-fde-case`. Quem ainda não tem o clone abre o terminal, roda `cd ~` e depois `claude`, e pede para instalar o git e o GitHub CLI e clonar o seu fork (ou segue o passo a passo à mão até o clone). Se ele pedir a senha do computador ou para entrar no GitHub, rode você mesmo o comando que ele mostrar, no seu terminal. Depois, feche o Claude Code, rode `cd ~/formacao-fde-case` e abra uma sessão nova com `claude`. O [SETUP.md](SETUP.md) explica os dois caminhos e traz o passo a passo à mão, no macOS ou no Windows (com WSL 2).
+
+No fim, o verificador diz o que está pronto e o que falta:
 
 ```bash
 python3 scripts/check_setup.py
@@ -18,7 +33,7 @@ python3 scripts/check_setup.py
 
 ## Como o trabalho se organiza: fork individual e fork líder
 
-- **Cada aluno tem o seu fork.** Um fork é a sua cópia deste repositório na sua conta do GitHub. Faça o seu até **quinta-feira, 12/11**.
+- **Cada aluno tem o seu fork.** Um fork é a sua cópia deste repositório na sua conta do GitHub. Ele é feito no bloco de Git de **sábado, 14/11**.
 - **Cada grupo escolhe um fork líder.** É o fork de uma pessoa do grupo, onde o trabalho do grupo se junta.
 - **Os integrantes entregam por pull request no fork líder.** Cada pessoa trabalha no próprio fork e abre um pull request (PR) para o fork líder do grupo.
 - **O Fernando acompanha os forks.** É assim que os instrutores veem o andamento de cada grupo.
@@ -94,11 +109,10 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 | Quando | O que acontece |
 |---|---|
 | Quarta, 11/11 | Vocês recebem o link deste repositório. |
-| Quinta, 12/11 | Prazo para cada aluno fazer o seu fork e rodar o setup ([SETUP.md](SETUP.md) e `python3 scripts/check_setup.py`). |
 | Sexta, 13/11, 18h–21h | Abertura da imersão na Casa Barte. |
-| Sábado, 14/11, 9h | Git em prática e formação dos grupos, junto com o **desafio do kit** (pasta `challenge/`). |
+| Sábado, 14/11, 9h | Git em prática (cada aluno faz o seu fork e confere o setup, pelo [SETUP.md](SETUP.md)) e formação dos grupos, junto com o **desafio do kit** (pasta `challenge/`). |
 | Sábado, 14/11, 9h40 | Roleplay: primeira reunião com o CFO, a controladoria e compras da Já Chegou. |
-| Sábado, 14/11, 10h30 | O **dossiê** chega como um commit no repositório original (a pasta exata será indicada pela coordenação; a proposta é `case/dossier/`). Atualize o seu fork para recebê-lo. |
+| Sábado, 14/11, 10h30 | O **dossiê** chega como um commit no repositório original, em [`case/dossier/`](case/dossier/README.md). Atualize o seu fork para recebê-lo. |
 | Sábado, 14/11, 12h | **Checkpoint 1**: diagnóstico e prioridade (o problema, o número a mover, a prioridade). |
 | Sábado, 14/11, 15h–18h | Solution Design e aplicação no caso (a aplicação vai das 16h15 às 17h30, depois do café da tarde), fechando com o **checkpoint 2**: checklist de acessos e credenciais, desenho da solução, plano de entrega e o que se repete num segundo cliente, a Terminal Sul. |
 | Domingo, 15/11, 9h–10h30 | Aula: da solução ao agente (componentes, harness, ferramentas, evals, guardrails), metade teoria e metade mão na massa. |
@@ -109,22 +123,22 @@ Nunca coloque o arquivo `.env` nem nenhuma chave ou senha num commit. O `.env` j
 
 ## Mapa das pastas
 
-O kit de domingo já está aqui, menos o gabarito, que entra no domingo de manhã.
-
 | Pasta | O que tem |
 |---|---|
-| `case/` | O case da Já Chegou: o briefing e o dossiê, que só aparece no sábado depois do roleplay. |
+| `case/` | O case da Já Chegou: o [briefing](case/briefing.md), de antes da primeira reunião, e o [dossiê](case/dossier/README.md), que entrou no sábado depois do roleplay. |
 | `challenge/` | As instruções do desafio do kit, de sábado de manhã. |
 | `templates/` | Os modelos dos entregáveis dos checkpoints. |
 | `teams/` | Uma pasta por grupo, com nome, integrantes e o link do fork líder. |
-| `DOMINGO.md` | Como funciona o kit de domingo: o agente, as três skills, as tools e o eval. |
-| `agente/` | O agente de domingo: instruções, as três skills e o script que roda. |
-| `mcp_server/`, `jachegou/` | As tools do agente, expostas por MCP, e o acesso à base. |
-| `dados/` | A base sintética de domingo. O gabarito (`dados/gabarito/`) chega no domingo de manhã. |
-| `baseline/`, `eval/` | Regras simples sem IA para comparar, e o eval contra o gabarito. |
-| `saidas/` | Onde o agente e o baseline gravam as propostas. |
+| `.claude/skills/setup-fde/` | A skill que configura a sua máquina: peça ao Claude Code "configura o meu setup de FDE". |
+| `AWESOME.md` | As ferramentas de um builder (Claude Code, Supabase, Cloudflare, Resend, Stripe, Python, Evolution API, Temporal) e onde o curso está com cada uma. |
 | `scripts/` | Utilitários, como o verificador de setup `scripts/check_setup.py`. |
 | `tests/` | Os testes automáticos do repositório (`uv run pytest`). |
+
+## O agente de domingo
+
+<!-- kit-domingo:inicio -->
+O kit de domingo (o agente, as skills, as tools, a base de notas, o baseline e o eval) chega a este repositório no domingo, 15/11, de manhã.
+<!-- kit-domingo:fim -->
 
 ## Comandos do dia a dia
 

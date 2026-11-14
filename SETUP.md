@@ -1,6 +1,52 @@
 # Setup: preparar a sua máquina para a Formação FDE
 
-Este guia é para quem não programa no dia a dia. Siga na ordem, copiando e colando os comandos. Reserve uns 30 a 45 minutos e faça **até quinta-feira, 12/11**, para chegar na sexta com tudo funcionando.
+Este guia é para quem não programa no dia a dia. Há dois caminhos: o **caminho principal**, em que o Claude Code configura a máquina com você, e o [passo a passo à mão](#passo-a-passo-à-mão), para quem prefere fazer cada instalação sozinho ou ficou travado no caminho principal. Os dois chegam ao mesmo lugar.
+
+> **Qual é o seu sistema?**
+> - **macOS:** siga as partes marcadas *macOS*.
+> - **Windows:** o caminho que damos suporte é o **WSL 2 com Ubuntu** (um Linux que roda dentro do Windows). Comece pela seção [Windows (WSL 2)](#windows-wsl-2) e depois siga as partes marcadas *Windows (Ubuntu no WSL)*. Todos os comandos são digitados **dentro do terminal do Ubuntu**, não no PowerShell.
+> - **Linux:** siga as partes marcadas *Windows (Ubuntu no WSL)*; os comandos são os mesmos no Ubuntu e no Debian.
+
+## Caminho principal: o Claude Code configura a máquina com você
+
+O repositório traz uma skill do Claude Code, a `setup-fde` (em `.claude/skills/setup-fde/`). Ela confere a máquina, instala o que falta (Git, GitHub CLI, Node.js, uv, Python 3.12, Docker, Supabase CLI e Wrangler), deixa o seu fork com `origin` e `upstream` certos, prepara o projeto e roda o verificador. O que só você pode fazer, como entrar na sua conta do GitHub, do Supabase e da Cloudflare, ela explica e espera você fazer: ela nunca pede senha, token ou chave na conversa.
+
+1. **Instale o Claude Code.** Abra o terminal (veja [Como abrir o terminal](#como-abrir-o-terminal); no Windows, primeiro a seção [Windows (WSL 2)](#windows-wsl-2)) e rode:
+
+   ```bash
+   curl -fsSL https://claude.ai/install.sh | bash
+   ```
+
+   O comando precisa do `curl`, que já vem no macOS e no Ubuntu. Se o Ubuntu disser que ele não existe, rode antes `sudo apt update && sudo apt install -y curl`. Feche e abra o terminal de novo.
+
+2. **Entre com a sua conta.** Rode `claude` e siga as instruções na tela. Os organizadores vão passar as orientações sobre a conta e o acesso a usar na imersão.
+
+3. **Peça o setup.** Com o Claude Code aberto na pasta do case, peça:
+
+   ```
+   configura o meu setup de FDE
+   ```
+
+   Ele mostra o que está pronto e o que falta, instala o que dá e diz, passo a passo, o que você precisa fazer. Se algo pedir a senha do computador, ele passa o comando para você rodar no seu terminal.
+
+**Ainda não tem o case na sua máquina?** A skill mora dentro do repositório, então ela só aparece numa sessão do Claude Code aberta na pasta `formacao-fde-case`. Quem ainda não tem essa pasta tem dois jeitos de começar:
+
+- abra o terminal, rode `cd ~` e depois `claude`, e peça: "instala o git e o GitHub CLI e clona o meu fork do barte-ai-services/formacao-fde-case". Se ele pedir a senha do computador ou para entrar no GitHub, rode você mesmo o comando que ele mostrar, no seu terminal. No fim, ele roda `gh repo fork barte-ai-services/formacao-fde-case --clone`, que cria a pasta `~/formacao-fde-case`; ou
+- siga o [passo a passo à mão](#passo-a-passo-à-mão) até o clone (seções Git, Conta no GitHub e GitHub CLI, e o passo a passo do fork no [README.md](README.md#passo-a-passo-fazer-o-fork-e-clonar)).
+
+Depois, feche o Claude Code, rode `cd ~/formacao-fde-case` e abra uma sessão nova com `claude`. Nela, peça de novo "configura o meu setup de FDE".
+
+## O Ahrena no Claude Code
+
+O **Ahrena** é um conjunto de plugins do Claude Code que a Barte usa para trabalhar com agentes. Ele traz um time de agentes, cada um com um papel: a **Athena** recebe um pedido de construção, planeja e distribui o trabalho; outros agentes constroem; o **Argos** revisa antes de qualquer coisa entrar. O case já vem configurado para usar o Ahrena (no arquivo `.claude/settings.json`), mas cada máquina precisa instalar os plugins uma vez.
+
+**Como instalar.** A skill `setup-fde` instala: quando você pede "configura o meu setup de FDE", ela instala os plugins do Ahrena junto com o resto. No Ubuntu 22.04 (e no WSL com ele), ela antes atualiza o git, porque o que vem com o sistema é velho demais para instalar os plugins; isso pede a senha do computador, e ela passa o comando para você rodar no seu terminal. Depois, feche o Claude Code e abra de novo na pasta do case.
+
+**Como confirmar que ele está ativo.** Dentro do Claude Code, na pasta do case, digite `/agents`. Na lista tem que aparecer a `athena` (às vezes com o nome completo, `ahrena-engineering-development:athena`). A skill `setup-fde` também confere: o item `ahrena` fica `ok` quando os plugins estão instalados, e diz quais faltam quando não estão.
+
+## Passo a passo à mão
+
+Se preferir fazer sozinho, siga na ordem, copiando e colando os comandos. Reserve uns 45 a 60 minutos.
 
 Você vai instalar:
 
@@ -9,13 +55,12 @@ Você vai instalar:
 3. **GitHub CLI (`gh`)**: o programa que faz o login do Git na sua conta do GitHub, para você conseguir enviar (`git push`) o seu trabalho.
 4. **Claude Code**: o assistente de código que vamos usar na imersão.
 5. **uv e Python 3.12**: o uv instala o Python e as bibliotecas do projeto.
+6. **Node.js e npm**: o Node.js roda programas escritos em JavaScript, e o npm instala esses programas. O Wrangler é um deles.
+7. **Docker**: roda programas dentro de "caixas" isoladas, chamadas contêineres. O Supabase usa o Docker para subir um banco de dados de teste no seu computador.
+8. **Supabase CLI e conta no Supabase**: o Supabase guarda os dados e o login dos usuários do que você publica.
+9. **Wrangler e conta na Cloudflare**: o Wrangler publica o seu projeto na Cloudflare, que entrega ele na internet.
 
 No fim, você roda um verificador que diz o que está pronto e o que falta.
-
-> **Qual é o seu sistema?**
-> - **macOS:** siga as partes marcadas *macOS*.
-> - **Windows:** o caminho que damos suporte é o **WSL 2 com Ubuntu** (um Linux que roda dentro do Windows). Comece pela seção [Windows (WSL 2)](#windows-wsl-2) e depois siga as partes marcadas *Windows (Ubuntu no WSL)*. Todos os comandos são digitados **dentro do terminal do Ubuntu**, não no PowerShell.
-> - **Linux:** siga as partes marcadas *Windows (Ubuntu no WSL)*; os comandos são os mesmos no Ubuntu e no Debian.
 
 ## Como abrir o terminal
 
@@ -132,6 +177,108 @@ Agora instale o Python 3.12 pelo uv:
 uv python install 3.12
 ```
 
+## Node.js e npm
+
+O **Node.js** roda programas em JavaScript; o **npm** vem junto com ele e instala esses programas. Precisamos da versão 22.12 ou mais nova.
+
+**macOS** (com o [Homebrew](https://brew.sh)):
+
+```bash
+brew install node
+```
+
+**Windows (Ubuntu no WSL):** o Node.js que vem no Ubuntu é velho demais, então ele vem do repositório da NodeSource. Rode um comando por vez:
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo tee /etc/apt/keyrings/nodesource.asc > /dev/null
+echo "deb [signed-by=/etc/apt/keyrings/nodesource.asc] https://deb.nodesource.com/node_24.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list > /dev/null
+sudo apt update && sudo apt install -y nodejs
+```
+
+Confira com `node --version` (deve mostrar `v22.12` ou mais novo, como `v24.11.1`) e `npm --version`.
+
+## Docker
+
+O **Docker** roda programas dentro de contêineres, caixas isoladas que não bagunçam o resto do computador. Não usamos o Docker Desktop: no Mac, o motor é o **Colima**; no Ubuntu, o **Docker Engine**. Os dois são gratuitos e não pedem conta.
+
+**macOS:**
+
+```bash
+brew install docker colima
+colima start
+```
+
+O `colima start` liga o motor. Depois de reiniciar o Mac, rode `colima start` de novo antes de usar o Docker.
+
+**Windows (Ubuntu no WSL):** o Docker Engine vem do repositório oficial da Docker. Rode um comando por vez:
+
+```bash
+sudo mkdir -p -m 755 /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo tee /etc/apt/keyrings/docker.asc > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt update && sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo usermod -aG docker "$USER"
+```
+
+O último comando deixa você usar o Docker sem `sudo`. Ele só vale num terminal novo: no Ubuntu do WSL, abra o PowerShell, rode `wsl --shutdown` e abra o Ubuntu de novo. No Ubuntu fora do WSL, saia da sua sessão e entre de novo.
+
+Se o Docker disser que não consegue falar com o motor (`Cannot connect to the Docker daemon`), ligue o serviço:
+
+```bash
+sudo systemctl start docker
+```
+
+Confira com `docker info`: ele deve mostrar os detalhes do motor, sem erro.
+
+## Supabase CLI e conta no Supabase
+
+O **Supabase** guarda os dados e o login dos usuários do que você publica. O **Supabase CLI** é o programa que conversa com ele pelo terminal.
+
+1. Se ainda não tem, crie uma conta em [supabase.com](https://supabase.com/dashboard/sign-up). Dá para entrar com a sua conta do GitHub.
+2. Instale o CLI.
+
+   **macOS:**
+
+   ```bash
+   brew install supabase/tap/supabase
+   ```
+
+   **Windows (Ubuntu no WSL):** o CLI não se instala pelo npm. O mais simples é pedir ao Claude Code: "instala o Supabase CLI pelo setup-fde". Ele baixa a versão que o curso usa, confere que o arquivo é o original e põe o programa na sua pasta pessoal, sem pedir senha. À mão, siga a [página de instalação do Supabase CLI](https://supabase.com/docs/guides/local-development/cli/getting-started) para Linux.
+
+   Feche e abra o terminal de novo e confira com `supabase --version`.
+
+3. Entre na sua conta:
+
+   ```bash
+   supabase login
+   ```
+
+   Ele abre o navegador (ou mostra um link para você abrir). Entre com a sua conta do Supabase e autorize. Se ele mostrar um código de verificação no navegador, copie e cole no terminal. Confira com `supabase projects list`: deve aparecer a lista dos seus projetos, mesmo que vazia.
+
+## Wrangler e conta na Cloudflare
+
+A **Cloudflare** entrega o que você publica na internet. O **Wrangler** é o programa que publica, pelo terminal. Ele vem pelo npm, então instale o Node.js antes.
+
+1. Se ainda não tem, crie uma conta gratuita em [dash.cloudflare.com/sign-up](https://dash.cloudflare.com/sign-up).
+2. Instale o Wrangler, na sua pasta pessoal (assim ele não pede a senha do computador):
+
+   ```bash
+   npm install -g --prefix ~/.local wrangler@4.162.0
+   ```
+
+   Feche e abra o terminal de novo e confira com `wrangler --version`. Se o terminal disser que `wrangler` não existe, rode `echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc` (no Mac, `~/.zshrc` no lugar de `~/.bashrc`) e abra o terminal de novo.
+
+3. Entre na sua conta:
+
+   ```bash
+   wrangler login
+   ```
+
+   Ele abre o navegador numa página da Cloudflare. Entre com a sua conta e clique em **Allow** para autorizar o Wrangler. Confira com `wrangler whoami`: deve aparecer o seu e-mail.
+
+   No Ubuntu do WSL, se o navegador não abrir sozinho, copie o link que aparece no terminal e abra no navegador do Windows.
+
 ## Preparar o projeto
 
 Com o seu fork já clonado (veja o passo a passo no [README.md](README.md#passo-a-passo-fazer-o-fork-e-clonar)), entre na pasta do projeto e instale as dependências:
@@ -147,7 +294,7 @@ Depois, crie o seu arquivo de configuração local a partir do exemplo:
 cp .env.example .env
 ```
 
-O `.env` guarda a chave da API (`ANTHROPIC_API_KEY`) e o modelo do agente (`AGENT_MODEL`). Os organizadores vão passar as orientações de como obter a chave. **Nunca** coloque o `.env` num commit: ele já está no `.gitignore`.
+O kit de domingo não precisa de credencial nenhuma: ele roda inteiro dentro do Claude Code, e o único requisito é o seu Claude Code. O `.env` fica para alguma credencial que o seu grupo precise guardar. **Nunca** coloque o `.env` num commit: ele já está no `.gitignore`.
 
 Para conferir que o projeto está de pé, rode os testes:
 
