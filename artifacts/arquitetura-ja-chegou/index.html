@@ -2,288 +2,606 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a mesma moldura do deck da Formação FDE. Um fluxo de três peças, a peça que fica embaixo (GitHub), e depois as peças uma a uma. */
+/* Layout: slides da Formação FDE no tema da Barte. Capa com a stack, o diagrama em camadas, três regras, peça a peça com os comandos, as credenciais e as ferramentas para depois. */
 :root {
-  --bg: #FAF8F4;
-  --surface: #FFFFFF;
-  --surface-2: #F1EEE8;
-  --fg: #171717;
-  --muted: #5B5853;
-  --faint: #8A867F;
-  --hair: rgba(23,23,23,.10);
-  --grid: rgba(23,23,23,.045);
+  --bg: #FFFFFF;
+  --surface: #FAF7F8;
+  --surface-2: #F2EDEF;
+  --fg: #030202;
+  --muted: #554D50;
+  --faint: #8A8084;
+  --hair: rgba(3,2,2,.10);
+  --line: rgba(3,2,2,.38);
   --pink: #DF285D;
+  --pink-soft: rgba(223,40,93,.07);
+  --ink: #030202;
+  --ink-fg: #FFFFFF;
+  --ink-muted: #B9B0B3;
+  --code-bg: #030202;
+  --code-fg: #F4EFF1;
+  --code-c: #8F8589;
+  --ts: #3178C6;
+  --cf: #F38020;
   --claude: #D97757;
-  --cloudflare: #F38020;
+  --sb: #3ECF8E;
   --supabase: #3ECF8E;
-  --ink-card: #171717;
-  --ink-card-fg: #FAF8F4;
-  --ink-card-muted: #BDB8B0;
-  --code-bg: #171717;
-  --code-fg: #F1EEE8;
-  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --cloudflare: #F38020;
+  --astro: #BC52EE;
+  --react: #087EA4;
+  --python: #3776AB;
+  --fastapi: #009688;
+  --band-cf: rgba(243,128,32,.07);
+  --band-out: rgba(3,2,2,.035);
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
-    --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
-    --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
+    --bg: #0B0909; --surface: #151213; --surface-2: #1F1B1C; --fg: #F6F1F3; --muted: #BDB3B7; --faint: #8F8589;
+    --hair: rgba(246,241,243,.12); --line: rgba(246,241,243,.42); --pink: #F0567F; --pink-soft: rgba(240,86,127,.10);
+    --ink: #1C1718; --ink-fg: #F6F1F3; --ink-muted: #ADA3A7; --code-bg: #000000; --code-fg: #F4EFF1;
+    --ts: #5A9BE0; --python: #6BA4D8; --fastapi: #2BB3A3; --react: #58C4DC; --band-cf: rgba(243,128,32,.10); --band-out: rgba(246,241,243,.04);
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #141312; --surface: #1D1C1A; --surface-2: #232220; --fg: #F1EEE8; --muted: #B5B0A8; --faint: #8F8A82;
-  --hair: rgba(241,238,232,.12); --grid: rgba(241,238,232,.04); --pink: #F0567F;
-  --ink-card: #0B0B0A; --ink-card-fg: #F1EEE8; --ink-card-muted: #A8A39B; --code-bg: #0B0B0A; --code-fg: #F1EEE8;
+  --bg: #0B0909; --surface: #151213; --surface-2: #1F1B1C; --fg: #F6F1F3; --muted: #BDB3B7; --faint: #8F8589;
+  --hair: rgba(246,241,243,.12); --line: rgba(246,241,243,.42); --pink: #F0567F; --pink-soft: rgba(240,86,127,.10);
+  --ink: #1C1718; --ink-fg: #F6F1F3; --ink-muted: #ADA3A7; --code-bg: #000000; --code-fg: #F4EFF1;
+  --ts: #5A9BE0; --python: #6BA4D8; --fastapi: #2BB3A3; --react: #58C4DC; --band-cf: rgba(243,128,32,.10); --band-out: rgba(246,241,243,.04);
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-body {
-  background: var(--bg);
-  background-image: linear-gradient(to right, var(--grid) 1px, transparent 1px), linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size: 64px 64px;
-  color: var(--fg);
-  font-family: var(--sans);
-  font-size: 17px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-}
-.wrap {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding-block: 56px 72px;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  display: flex;
-  flex-direction: column;
-  gap: 56px;
-}
-.eyebrow { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); font-weight: 500; margin: 0; }
-h1 { font-weight: 400; font-size: clamp(40px, 7vw, 76px); line-height: 1.02; letter-spacing: -0.035em; margin: 10px 0 0; text-wrap: balance; }
-h1 em, h2 em { font-family: var(--serif); font-style: italic; letter-spacing: -0.01em; }
-h1 em { color: var(--pink); }
-h2 { font-weight: 400; font-size: clamp(28px, 4vw, 40px); line-height: 1.1; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
-.lead { font-size: 19px; color: var(--muted); max-width: 64ch; margin: 18px 0 0; }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 19px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1280px; margin: 0 auto; padding-block: 64px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 96px; }
 p { margin: 0; }
-section { display: flex; flex-direction: column; gap: 22px; }
+section, header { display: flex; flex-direction: column; gap: 28px; min-width: 0; }
+.eyebrow { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--pink); font-weight: 600; margin: 0; }
+h1 { font-weight: 700; font-size: clamp(44px, 7.5vw, 96px); line-height: 1; letter-spacing: -0.04em; margin: 0; text-wrap: balance; }
+h1 span { color: var(--pink); }
+h2 { font-weight: 700; font-size: clamp(32px, 4.6vw, 56px); line-height: 1.05; letter-spacing: -0.03em; margin: 0; text-wrap: balance; }
+h2 span { color: var(--pink); }
+.lead { font-size: clamp(20px, 2vw, 26px); color: var(--muted); max-width: 40ch; }
+.sub { color: var(--muted); max-width: 60ch; }
+a { color: inherit; text-decoration-color: color-mix(in srgb, var(--pink) 60%, transparent); text-underline-offset: 3px; }
+a:hover { color: var(--pink); }
+a:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; border-radius: 4px; }
+code { font-family: var(--mono); font-size: .88em; overflow-wrap: anywhere; }
 
-/* ícones */
-.logo { width: 28px; height: 28px; flex: none; }
-.logo path { fill: currentColor; }
+/* capa */
+.stack { display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 0 0; padding: 0; list-style: none; }
+.stack li { display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px 10px 12px; border: 1px solid var(--hair); border-radius: 999px; font-size: 17px; font-weight: 500; background: var(--surface); }
+.stack svg { width: 24px; height: 24px; flex: none; }
 
-/* fluxo */
-.flow { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,1fr) 88px minmax(0,1fr); align-items: stretch; }
-.node { border-radius: 20px; padding: 22px 22px 24px; display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--hair); box-shadow: 0 10px 30px rgba(23,23,23,.06); min-width: 0; }
-.node .head { display: flex; align-items: center; gap: 10px; }
-.node .vendor { font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-weight: 500; }
-.node .name { font-size: 24px; letter-spacing: -0.01em; }
-.node .what { color: var(--muted); font-size: 15.5px; }
-.node.claude { background: var(--ink-card); border-color: var(--ink-card); color: var(--ink-card-fg); }
-.node.claude .name { color: var(--claude); }
-.node.claude .what, .node.claude .vendor { color: var(--ink-card-muted); }
-.node.claude .logo { color: var(--claude); }
-.node.cf { border-color: color-mix(in srgb, var(--cloudflare) 45%, transparent); }
-.node.cf .logo { color: var(--cloudflare); }
-.node.sb .logo { color: var(--supabase); }
-.edge { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 0 6px; text-align: center; }
-.edge .arrow { width: 100%; height: 14px; color: var(--faint); }
-.edge .proto { font-size: 13px; color: var(--fg); font-weight: 500; }
-.edge .auth { font-size: 12px; color: var(--faint); line-height: 1.35; }
-.below { display: grid; grid-template-columns: minmax(0,1fr) 88px minmax(0,2fr) ; margin-top: 18px; }
-.node.gh .logo { color: var(--fg); }
-.node.gh { grid-column: 1 / -1; flex-direction: row; align-items: center; gap: 18px; flex-wrap: wrap; }
-.node.gh .text { display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1 1 320px; }
+/* diagrama */
+.diagram-wrap { background: var(--bg); border: 1px solid var(--hair); border-radius: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.diagram { display: block; width: 100%; min-width: 860px; height: auto; font-family: var(--sans); }
+.diagram .band-user { fill: var(--pink-soft); }
+.diagram .band-cf { fill: var(--band-cf); }
+.diagram .band-out { fill: var(--band-out); }
+.diagram .band-label, .diagram .lbl { paint-order: stroke; stroke: var(--bg); stroke-width: 6px; stroke-linejoin: round; }
+.diagram .band-label { fill: var(--faint); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; }
+.diagram .box { fill: var(--bg); stroke: var(--hair); stroke-width: 1; }
+.diagram .box-cf { fill: var(--bg); stroke: var(--cf); stroke-width: 1.5; }
+.diagram .box-sb { fill: var(--bg); stroke: var(--sb); stroke-width: 1.5; }
+.diagram .box-ink { fill: var(--ink); stroke: var(--ink); }
+.diagram .box-gate { fill: var(--cf); fill-opacity: .14; stroke: var(--cf); stroke-width: 1.5; }
+.diagram .t { fill: var(--fg); font-size: 20px; font-weight: 600; }
+.diagram .t-ink { fill: var(--ink-fg); font-size: 20px; font-weight: 600; }
+.diagram .s { fill: var(--muted); font-size: 15px; }
+.diagram .s-ink { fill: var(--ink-muted); font-size: 15px; }
+.diagram .edge { stroke: var(--line); stroke-width: 1.75; fill: none; }
+.diagram .head { fill: var(--line); }
+.diagram .lbl { fill: var(--fg); font-size: 13.5px; font-weight: 500; }
+.diagram .c-ts { color: var(--ts); } .diagram .c-cf { color: var(--cf); } .diagram .c-claude { color: var(--claude); }
+.diagram .c-sb { color: var(--sb); } .diagram .c-fg { color: var(--fg); } .diagram .c-pink { color: var(--pink); }
+.hint { display: none; color: var(--faint); font-size: 15px; }
+
+/* regras */
+.rules { background: var(--ink); color: var(--ink-fg); border-radius: 24px; padding: 36px; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 32px; }
+.rules div { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.rules b { font-size: 26px; line-height: 1.15; font-weight: 700; letter-spacing: -0.02em; }
+.rules b::before { content: ""; display: block; width: 32px; height: 4px; border-radius: 2px; background: var(--pink); margin-bottom: 16px; }
+.rules span { color: var(--ink-muted); font-size: 17px; }
 
 /* peças */
-.pieces { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
-.piece { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.piece .head { display: flex; align-items: center; gap: 10px; }
-.piece h3 { font-weight: 500; font-size: 19px; margin: 0; }
-.piece ul { margin: 0; padding-left: 18px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
-.piece.claude .logo { color: var(--claude); }
-.piece.cf .logo { color: var(--cloudflare); }
-.piece.sb .logo { color: var(--supabase); }
-.piece.gh .logo { color: var(--fg); }
-pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 12px; padding: 14px 16px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; }
-pre .c { color: #8F8A82; }
-code { font-family: var(--mono); font-size: .92em; }
+.pieces { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+.piece { background: var(--surface); border: 1px solid var(--hair); border-radius: 24px; padding: 28px; display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.piece .head { display: flex; align-items: center; gap: 12px; }
+.piece h3 { font-weight: 600; font-size: 24px; letter-spacing: -0.01em; margin: 0; }
+.piece p { color: var(--muted); font-size: 17px; }
+.logo { width: 30px; height: 30px; flex: none; }
+.logos { display: inline-flex; gap: 6px; }
+pre { margin: 0; background: var(--code-bg); color: var(--code-fg); border-radius: 14px; padding: 16px 18px; overflow-x: auto; font-family: var(--mono); font-size: 13.5px; line-height: 1.6; tab-size: 2; }
+pre .c { color: var(--code-c); }
 
-/* autenticação */
-.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; }
-table { width: 100%; border-collapse: collapse; font-size: 15.5px; min-width: 640px; }
-th { text-align: left; font-weight: 500; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); padding: 16px 20px 12px; border-bottom: 1px solid var(--hair); }
-td { padding: 14px 20px; border-bottom: 1px solid var(--hair); vertical-align: top; color: var(--muted); }
+/* tabela */
+.table-wrap { overflow-x: auto; border: 1px solid var(--hair); border-radius: 24px; }
+table { width: 100%; border-collapse: collapse; font-size: 17px; min-width: 680px; }
+th { text-align: left; font-weight: 600; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); padding: 18px 24px 12px; border-bottom: 1px solid var(--hair); }
+td { padding: 16px 24px; border-bottom: 1px solid var(--hair); vertical-align: top; color: var(--muted); }
 tr:last-child td { border-bottom: 0; }
-td:first-child { color: var(--fg); white-space: nowrap; }
+td:first-child { color: var(--fg); font-weight: 500; white-space: nowrap; }
 
-.note { border-left: 3px solid var(--pink); padding: 4px 0 4px 18px; color: var(--muted); max-width: 70ch; }
-.note strong { color: var(--fg); font-weight: 500; }
-footer { color: var(--faint); font-size: 14px; border-top: 1px solid var(--hair); padding-top: 18px; }
+/* ferramentas */
+.tools-group { display: flex; flex-direction: column; gap: 14px; }
+.tools-group h3 { font-weight: 500; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); margin: 0; }
+.tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 18px; }
+.tool { background: var(--surface); border: 1px solid var(--hair); border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.tool h4 { font-weight: 500; font-size: 19px; margin: 0; }
+.tool-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.tool .logo { width: 28px; height: 28px; }
+.initials { width: 28px; height: 28px; flex: none; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--hair); color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: .02em; display: inline-flex; align-items: center; justify-content: center; }
+.tool .role { color: var(--fg); font-size: 15.5px; }
+.tool .when { color: var(--muted); font-size: 15px; }
+.tool ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: flex; flex-direction: column; gap: 4px; }
+.more { color: var(--muted); max-width: 70ch; }
+footer { color: var(--faint); font-size: 15px; border-top: 1px solid var(--hair); padding-top: 20px; }
 
-@media (max-width: 860px) {
-  .flow { grid-template-columns: minmax(0,1fr); }
-  .edge { flex-direction: row; justify-content: flex-start; padding: 10px 6px; text-align: left; gap: 12px; }
-  .edge .arrow { width: 14px; height: 40px; transform: none; }
-  .edge .arrow.h { display: none; }
-  .edge .arrow.v { display: block; }
-  .below { grid-template-columns: minmax(0,1fr); }
-  .pieces { grid-template-columns: minmax(0,1fr); }
+@media (max-width: 900px) {
+  .pieces, .rules, .tools { grid-template-columns: minmax(0,1fr); }
+  .rules { padding: 26px; gap: 24px; }
+  .hint { display: block; }
+  .wrap { gap: 72px; }
 }
-.edge .arrow.v { display: none; }
-@media (max-width: 860px) { .edge .arrow.v { display: block; } }
+@media (max-width: 420px) {
+  body { font-size: 17px; }
+  .piece, .tool { padding: 20px; }
+  pre { font-size: 12px; padding: 12px; }
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-claude" viewBox="0 0 24 24"><path fill="currentColor" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
-  <symbol id="i-cloudflare" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></symbol>
-  <symbol id="i-supabase" viewBox="0 0 24 24"><path fill="currentColor" d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z"/></symbol>
-  <symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+<symbol id="i-typescript" viewBox="0 0 24 24"><path fill="currentColor" d="M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"/></symbol>
+<symbol id="i-cloudflare" viewBox="0 0 24 24"><path fill="currentColor" d="M16.5088 16.8447c.1475-.5068.0908-.9707-.1553-1.3154-.2246-.3164-.6045-.499-1.0615-.5205l-8.6592-.1123a.1559.1559 0 0 1-.1333-.0713c-.0283-.042-.0351-.0986-.021-.1553.0278-.084.1123-.1484.2036-.1562l8.7359-.1123c1.0351-.0489 2.1601-.8868 2.5537-1.9136l.499-1.3013c.0215-.0561.0293-.1128.0147-.168-.5625-2.5463-2.835-4.4453-5.5499-4.4453-2.5039 0-4.6284 1.6177-5.3876 3.8614-.4927-.3658-1.1187-.5625-1.794-.499-1.2026.119-2.1665 1.083-2.2861 2.2856-.0283.31-.0069.6128.0635.894C1.5683 13.171 0 14.7754 0 16.752c0 .1748.0142.3515.0352.5273.0141.083.0844.1475.1689.1475h15.9814c.0909 0 .1758-.0645.2032-.1553l.12-.4268zm2.7568-5.5634c-.0771 0-.1611 0-.2383.0112-.0566 0-.1054.0415-.127.0976l-.3378 1.1744c-.1475.5068-.0918.9707.1543 1.3164.2256.3164.6055.498 1.0625.5195l1.8437.1133c.0557 0 .1055.0263.1329.0703.0283.043.0351.1074.0214.1562-.0283.084-.1132.1485-.204.1553l-1.921.1123c-1.041.0488-2.1582.8867-2.5527 1.914l-.1406.3585c-.0283.0713.0215.1416.0986.1416h6.5977c.0771 0 .1474-.0489.169-.126.1122-.4082.1757-.837.1757-1.2803 0-2.6025-2.125-4.727-4.7344-4.727"/></symbol>
+<symbol id="i-cloudflareworkers" viewBox="0 0 24 24"><path fill="currentColor" d="m8.213.063 8.879 12.136-8.67 11.739h2.476l8.665-11.735-8.89-12.14Zm4.728 0 9.02 11.992-9.018 11.883h2.496L24 12.656v-1.199L15.434.063ZM7.178 2.02.01 11.398l-.01 1.2 7.203 9.644 1.238-1.676-6.396-8.556 6.361-8.313Z"/></symbol>
+<symbol id="i-claude" viewBox="0 0 24 24"><path fill="currentColor" d="m4.7144 15.9555 4.7174-2.6471.079-.2307-.079-.1275h-.2307l-.7893-.0486-2.6956-.0729-2.3375-.0971-2.2646-.1214-.5707-.1215-.5343-.7042.0546-.3522.4797-.3218.686.0608 1.5179.1032 2.2767.1578 1.6514.0972 2.4468.255h.3886l.0546-.1579-.1336-.0971-.1032-.0972L6.973 9.8356l-2.55-1.6879-1.3356-.9714-.7225-.4918-.3643-.4614-.1578-1.0078.6557-.7225.8803.0607.2246.0607.8925.686 1.9064 1.4754 2.4893 1.8336.3643.3035.1457-.1032.0182-.0728-.164-.2733-1.3539-2.4467-1.445-2.4893-.6435-1.032-.17-.6194c-.0607-.255-.1032-.4674-.1032-.7285L6.287.1335 6.6997 0l.9957.1336.419.3642.6192 1.4147 1.0018 2.2282 1.5543 3.0296.4553.8985.2429.8318.091.255h.1579v-.1457l.1275-1.706.2368-2.0947.2307-2.6957.0789-.7589.3764-.9107.7468-.4918.5828.2793.4797.686-.0668.4433-.2853 1.8517-.5586 2.9021-.3643 1.9429h.2125l.2429-.2429.9835-1.3053 1.6514-2.0643.7286-.8196.85-.9046.5464-.4311h1.0321l.759 1.1293-.34 1.1657-1.0625 1.3478-.8804 1.1414-1.2628 1.7-.7893 1.36.0729.1093.1882-.0183 2.8535-.607 1.5421-.2794 1.8396-.3157.8318.3886.091.3946-.3278.8075-1.967.4857-2.3072.4614-3.4364.8136-.0425.0304.0486.0607 1.5482.1457.6618.0364h1.621l3.0175.2247.7892.522.4736.6376-.079.4857-1.2142.6193-1.6393-.3886-3.825-.9107-1.3113-.3279h-.1822v.1093l1.0929 1.0686 2.0035 1.8092 2.5075 2.3314.1275.5768-.3218.4554-.34-.0486-2.2039-1.6575-.85-.7468-1.9246-1.621h-.1275v.17l.4432.6496 2.3436 3.5214.1214 1.0807-.17.3521-.6071.2125-.6679-.1214-1.3721-1.9246L14.38 17.959l-1.1414-1.9428-.1397.079-.674 7.2552-.3156.3703-.7286.2793-.6071-.4614-.3218-.7468.3218-1.4753.3886-1.9246.3157-1.53.2853-1.9004.17-.6314-.0121-.0425-.1397.0182-1.4328 1.9672-2.1796 2.9446-1.7243 1.8456-.4128.164-.7164-.3704.0667-.6618.4008-.5889 2.386-3.0357 1.4389-1.882.929-1.0868-.0062-.1579h-.0546l-6.3385 4.1164-1.1293.1457-.4857-.4554.0608-.7467.2307-.2429 1.9064-1.3114Z"/></symbol>
+<symbol id="i-anthropic" viewBox="0 0 24 24"><path fill="currentColor" d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z"/></symbol>
+<symbol id="i-supabase" viewBox="0 0 24 24"><path fill="currentColor" d="M11.9 1.036c-.015-.986-1.26-1.41-1.874-.637L.764 12.05C-.33 13.427.65 15.455 2.409 15.455h9.579l.113 7.51c.014.985 1.259 1.408 1.873.636l9.262-11.653c1.093-1.375.113-3.403-1.645-3.403h-9.642z"/></symbol>
+<symbol id="i-github" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></symbol>
+<symbol id="i-resend" viewBox="0 0 24 24"><path fill="currentColor" d="M14.679 0c4.648 0 7.413 2.765 7.413 6.434s-2.765 6.434-7.413 6.434H12.33L24 24h-8.245l-8.88-8.44c-.636-.588-.93-1.273-.93-1.86 0-.831.587-1.565 1.713-1.883l4.574-1.224c1.737-.465 2.936-1.81 2.936-3.572 0-2.153-1.761-3.4-3.939-3.4H0V0z"/></symbol>
+<symbol id="i-modelcontextprotocol" viewBox="0 0 24 24"><path fill="currentColor" d="M13.85 0a4.16 4.16 0 0 0-2.95 1.217L1.456 10.66a.835.835 0 0 0 0 1.18.835.835 0 0 0 1.18 0l9.442-9.442a2.49 2.49 0 0 1 3.541 0 2.49 2.49 0 0 1 0 3.541L8.59 12.97l-.1.1a.835.835 0 0 0 0 1.18.835.835 0 0 0 1.18 0l.1-.098 7.03-7.034a2.49 2.49 0 0 1 3.542 0l.049.05a2.49 2.49 0 0 1 0 3.54l-8.54 8.54a1.96 1.96 0 0 0 0 2.755l1.753 1.753a.835.835 0 0 0 1.18 0 .835.835 0 0 0 0-1.18l-1.753-1.753a.266.266 0 0 1 0-.394l8.54-8.54a4.185 4.185 0 0 0 0-5.9l-.05-.05a4.16 4.16 0 0 0-2.95-1.218c-.2 0-.401.02-.6.048a4.17 4.17 0 0 0-1.17-3.552A4.16 4.16 0 0 0 13.85 0m0 3.333a.84.84 0 0 0-.59.245L6.275 10.56a4.186 4.186 0 0 0 0 5.902 4.186 4.186 0 0 0 5.902 0L19.16 9.48a.835.835 0 0 0 0-1.18.835.835 0 0 0-1.18 0l-6.985 6.984a2.49 2.49 0 0 1-3.54 0 2.49 2.49 0 0 1 0-3.54l6.983-6.985a.835.835 0 0 0 0-1.18.84.84 0 0 0-.59-.245"/></symbol>
+<symbol id="i-barte" viewBox="0 0 24 24"><path fill="currentColor" transform="scale(0.208696)" d="M83.0722 58.8881C81.9137 57.0822 79.8122 56.004 77.5221 56.004H60.8986L80.4049 11.934C81.294 9.93935 81.1054 7.75607 79.893 5.89623C78.5189 3.76685 76.0672 2.5 73.346 2.5H40.2608C35.1417 2.5 30.6423 5.24932 28.7564 9.48113L10.4894 50.7749C9.70811 52.527 9.86977 54.4407 10.9205 56.0579C12.106 57.8908 14.2344 58.996 16.6054 58.996H32.7708L12.8334 104.063C12.0521 105.842 12.2138 107.81 13.2915 109.481C14.5308 111.368 16.7131 112.5 19.1379 112.5H52.9237C58.5008 112.5 63.4043 109.508 65.4519 104.899L83.5302 64.0364C84.2846 62.3383 84.123 60.4515 83.0991 58.8612L83.0722 58.8881ZM18.6799 54.9798C16.0665 54.9798 14.4769 52.8504 15.3121 50.9906L33.5791 11.7453C34.9531 8.64555 38.4826 6.54313 42.3353 6.54313H63.9162C66.5296 6.54313 68.1192 8.6725 67.284 10.5323L49.1248 49.5081C47.6699 52.7695 44.0058 54.9528 39.9375 54.9528H18.6799V54.9798ZM78.7075 63.8477L60.6292 102.635C59.0935 106.112 55.1599 108.457 50.8222 108.457H29.7802C27.2476 108.457 25.7658 106.381 26.5471 104.629L45.4876 63.9016C46.5114 61.5836 49.1517 60.0202 52.0615 60.0202H75.4475C77.9801 60.0202 79.4619 62.0957 78.6806 63.8477H78.7075Z"/></symbol>
+<symbol id="i-1password" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0c6.627 0 12 5.373 12 12 0 6.628-5.373 12-12 12S0 18.628 0 12C0 5.373 5.373 0 12 0m-.893 4.86c-.485 0-.727.001-.913.095a.87.87 0 0 0-.378.379c-.094.185-.095.428-.095.912v2.747c0 .12 0 .182.016.238q.02.075.065.138a1 1 0 0 0 .175.162l.695.564c.113.092.17.139.19.194a.22.22 0 0 1 0 .15c-.02.056-.077.102-.19.194l-.695.564a1 1 0 0 0-.175.162.4.4 0 0 0-.065.138 1 1 0 0 0-.016.238v6.019c0 .485 0 .728.095.913a.87.87 0 0 0 .378.378c.186.094.428.094.913.094h1.786c.485 0 .727 0 .913-.094a.87.87 0 0 0 .378-.378c.095-.185.095-.428.095-.913v-2.747c0-.12 0-.182-.016-.238a.4.4 0 0 0-.065-.138 1 1 0 0 0-.175-.162l-.695-.564c-.113-.092-.17-.138-.191-.193a.22.22 0 0 1 0-.152c.02-.055.078-.1.19-.193l.696-.564a1 1 0 0 0 .175-.162.4.4 0 0 0 .065-.138 1 1 0 0 0 .016-.238V6.246c0-.484 0-.727-.095-.912a.87.87 0 0 0-.378-.379c-.186-.094-.428-.094-.913-.094Z"/></symbol>
+<symbol id="i-astro" viewBox="0 0 24 24"><path fill="currentColor" d="M8.358 20.162c-1.186-1.07-1.532-3.316-1.038-4.944.856 1.026 2.043 1.352 3.272 1.535 1.897.283 3.76.177 5.522-.678.202-.098.388-.229.608-.36.166.473.209.95.151 1.437-.14 1.185-.738 2.1-1.688 2.794-.38.277-.782.525-1.175.787-1.205.804-1.531 1.747-1.078 3.119l.044.148a3.158 3.158 0 0 1-1.407-1.188 3.31 3.31 0 0 1-.544-1.815c-.004-.32-.004-.642-.048-.958-.106-.769-.472-1.113-1.161-1.133-.707-.02-1.267.411-1.415 1.09-.012.053-.028.104-.045.165h.002zm-5.961-4.445s3.24-1.575 6.49-1.575l2.451-7.565c.092-.366.36-.614.662-.614.302 0 .57.248.662.614l2.45 7.565c3.85 0 6.491 1.575 6.491 1.575L16.088.727C15.93.285 15.663 0 15.303 0H8.697c-.36 0-.615.285-.784.727l-5.516 14.99z"/></symbol>
+<symbol id="i-bruno" viewBox="0 0 24 24"><path fill="currentColor" d="M9.394 9.583s-.742.511-1.13.275c-.387-.236-.51-.742-.274-1.129.236-.388.742-.511 1.129-.275.388.236.275 1.129.275 1.129m1.48 3.245-.308.82.582.24c.04-.224.254-.372.477-.332.224.041.372.254.332.478-.093.515-.638.813-1.122.613l-.95-.391a.41.41 0 0 1-.228-.524l.448-1.193c.12-.32.426-.533.769-.533h2.525l.239.036c.076.023.148.057.214.101a.817.817 0 0 1 .303.363l.476 1.12c.083.197.002.425-.187.524l-.896.471c-.505.266-1.121-.053-1.196-.62a.411.411 0 0 1 .353-.461.411.411 0 0 1 .461.353l.56-.294-.327-.771zM9.353 17.98c-.959-.514-2.183-1.54-1.961-3.22.029-.225.236-.383.461-.354.225.03.383.236.353.461-.167 1.272.822 2.009 1.546 2.395.348.185.771.151 1.081-.092l.903-.708v-1.045c0-.226.184-.41.411-.41s.411.184.411.41v1.045l.903.708c.19.15.423.22.655.209a.45.45 0 0 1 .074-.019.42.42 0 0 1 .093-.003c.089-.02.176-.051.259-.095.724-.386 1.713-1.123 1.546-2.395a.411.411 0 0 1 .353-.461c.225-.029.432.129.461.354.223 1.688-1.013 2.716-1.974 3.227-.072.038-.145.071-.22.099.148 1.424-.14 2.562-.449 3.24-.169.37-.355.617-.49.732-.194.167-.517.305-.933.366-.531.078-1.227.039-1.945-.182-.576-.177-.973-.686-1.208-1.343-.362-1.009-.352-2.368-.33-2.919m4.54.213a1.81 1.81 0 0 1-.939-.376l-.807-.633-.807.633c-.341.268-.758.397-1.173.384-.012.453-.001 1.219.15 1.922.072.333.174.652.329.908.122.2.275.361.486.425.586.18 1.152.218 1.585.155.227-.033.412-.086.518-.176.115-.099.259-.363.395-.744.213-.597.367-1.46.263-2.498m-8.683-.955-.191.402c-.384.81-1.475.955-2.053.27-.81-.961-1.948-2.505-2.548-4.068-.427-1.115-.576-2.241-.213-3.198C2.894 3.559 6.247 2.969 6.98 2.928c1.34-.865 5.583-2.807 10.424.342.795-.051 4.042.203 6.424 7.252.325.961.162 2.081-.263 3.186-.599 1.557-1.709 3.088-2.5 4.046-.574.695-1.675.553-2.061-.262l-.133-.28c-.219.369-.524.832-.901 1.281-.57.679-1.306 1.32-2.154 1.598a.412.412 0 0 1-.519-.263.4114.4114 0 0 1 .263-.518c.705-.231 1.306-.78 1.781-1.345.556-.662.938-1.355 1.097-1.666l-.245-.518c-.126-.264-.154-.56-.078-.842.246-.924.981-4.015.071-6.043a.4105.4105 0 1 1 .749-.336c.993 2.212.243 5.583-.026 6.591a.405.405 0 0 0 .026.278l.811 1.712c.129.27.494.32.685.089.748-.904 1.801-2.346 2.367-3.817.351-.912.52-1.834.252-2.628-2.447-7.241-5.667-6.687-5.667-6.687a.416.416 0 0 1-.309-.061C12.48.972 8.456 2.917 7.339 3.676a.41.41 0 0 1-.252.07S3.739 3.649.973 10.935c-.297.783-.137 1.701.213 2.612.565 1.475 1.644 2.927 2.408 3.833.192.228.555.177.683-.092l.816-1.723a.4.4 0 0 0 .027-.278c-.269-1.008-1.02-4.38-.027-6.592a.4113.4113 0 0 1 .543-.206c.207.093.3.336.207.543-.911 2.028-.176 5.119.071 6.043.075.282.047.578-.078.842l-.203.427c.117.226 1.249 2.351 2.958 2.911.216.071.334.303.263.519a.4115.4115 0 0 1-.519.262c-1.484-.487-2.606-1.983-3.125-2.798m10.247-7.655s-.114-.893.274-1.129a.821.821 0 0 1 1.129.275c.236.387.113.893-.274 1.129-.388.236-1.129-.275-1.129-.275"/></symbol>
+<symbol id="i-docker" viewBox="0 0 24 24"><path fill="currentColor" d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"/></symbol>
+<symbol id="i-duckdb" viewBox="0 0 24 24"><path fill="currentColor" d="M12 0C5.363 0 0 5.363 0 12s5.363 12 12 12 12-5.363 12-12S18.637 0 12 0zM9.502 7.03a4.974 4.974 0 0 1 4.97 4.97 4.974 4.974 0 0 1-4.97 4.97A4.974 4.974 0 0 1 4.532 12a4.974 4.974 0 0 1 4.97-4.97zm6.563 3.183h2.351c.98 0 1.787.782 1.787 1.762s-.807 1.789-1.787 1.789h-2.351v-3.551z"/></symbol>
+<symbol id="i-fastapi" viewBox="0 0 24 24"><path fill="currentColor" d="M12 .0387C5.3729.0384.0003 5.3931 0 11.9988c-.001 6.6066 5.372 11.9628 12 11.9625 6.628.0003 12.001-5.3559 12-11.9625-.0003-6.6057-5.3729-11.9604-12-11.96m-.829 5.4153h7.55l-7.5805 5.3284h5.1828L5.279 18.5436q2.9466-6.5444 5.892-13.0896"/></symbol>
+<symbol id="i-grafana" viewBox="0 0 24 24"><path fill="currentColor" d="M23.02 10.59a8.578 8.578 0 0 0-.862-3.034 8.911 8.911 0 0 0-1.789-2.445c.337-1.342-.413-2.505-.413-2.505-1.292-.08-2.113.4-2.416.62-.052-.02-.102-.044-.154-.064-.22-.089-.446-.172-.677-.247-.231-.073-.47-.14-.711-.197a9.867 9.867 0 0 0-.875-.161C14.557.753 12.94 0 12.94 0c-1.804 1.145-2.147 2.744-2.147 2.744l-.018.093c-.098.029-.2.057-.298.088-.138.042-.275.094-.413.143-.138.055-.275.107-.41.166a8.869 8.869 0 0 0-1.557.87l-.063-.029c-2.497-.955-4.716.195-4.716.195-.203 2.658.996 4.33 1.235 4.636a11.608 11.608 0 0 0-.607 2.635C1.636 12.677.953 15.014.953 15.014c1.926 2.214 4.171 2.351 4.171 2.351.003-.002.006-.002.006-.005.285.509.615.994.986 1.446.156.19.32.371.488.548-.704 2.009.099 3.68.099 3.68 2.144.08 3.553-.937 3.849-1.173a9.784 9.784 0 0 0 3.164.501h.08l.055-.003.107-.002.103-.005.003.002c1.01 1.44 2.788 1.646 2.788 1.646 1.264-1.332 1.337-2.653 1.337-2.94v-.058c0-.02-.003-.039-.003-.06.265-.187.52-.387.758-.6a7.875 7.875 0 0 0 1.415-1.7c1.43.083 2.437-.885 2.437-.885-.236-1.49-1.085-2.216-1.264-2.354l-.018-.013-.016-.013a.217.217 0 0 1-.031-.02c.008-.092.016-.18.02-.27.011-.162.016-.323.016-.48v-.253l-.005-.098-.008-.135a1.891 1.891 0 0 0-.01-.13c-.003-.042-.008-.083-.013-.125l-.016-.124-.018-.122a6.215 6.215 0 0 0-2.032-3.73 6.015 6.015 0 0 0-3.222-1.46 6.292 6.292 0 0 0-.85-.048l-.107.002h-.063l-.044.003-.104.008a4.777 4.777 0 0 0-3.335 1.695c-.332.4-.592.84-.768 1.297a4.594 4.594 0 0 0-.312 1.817l.003.091c.005.055.007.11.013.164a3.615 3.615 0 0 0 .698 1.82 3.53 3.53 0 0 0 1.827 1.282c.33.098.66.14.971.137.039 0 .078 0 .114-.002l.063-.003c.02 0 .041-.003.062-.003.034-.002.065-.007.099-.01.007 0 .018-.003.028-.003l.031-.005.06-.008a1.18 1.18 0 0 0 .112-.02c.036-.008.072-.013.109-.024a2.634 2.634 0 0 0 .914-.415c.028-.02.056-.041.085-.065a.248.248 0 0 0 .039-.35.244.244 0 0 0-.309-.06l-.078.042c-.09.044-.184.083-.283.116a2.476 2.476 0 0 1-.475.096c-.028.003-.054.006-.083.006l-.083.002c-.026 0-.054 0-.08-.002l-.102-.006h-.012l-.024.006c-.016-.003-.031-.003-.044-.006-.031-.002-.06-.007-.091-.01a2.59 2.59 0 0 1-.724-.213 2.557 2.557 0 0 1-.667-.438 2.52 2.52 0 0 1-.805-1.475 2.306 2.306 0 0 1-.029-.444l.006-.122v-.023l.002-.031c.003-.021.003-.04.005-.06a3.163 3.163 0 0 1 1.352-2.29 3.12 3.12 0 0 1 .937-.43 2.946 2.946 0 0 1 .776-.101h.06l.07.002.045.003h.026l.07.005a4.041 4.041 0 0 1 1.635.49 3.94 3.94 0 0 1 1.602 1.662 3.77 3.77 0 0 1 .397 1.414l.005.076.003.075c.002.026.002.05.002.075 0 .024.003.052 0 .07v.065l-.002.073-.008.174a6.195 6.195 0 0 1-.08.639 5.1 5.1 0 0 1-.267.927 5.31 5.31 0 0 1-.624 1.13 5.052 5.052 0 0 1-3.237 2.014 4.82 4.82 0 0 1-.649.066l-.039.003h-.287a6.607 6.607 0 0 1-1.716-.265 6.776 6.776 0 0 1-3.4-2.274 6.75 6.75 0 0 1-.746-1.15 6.616 6.616 0 0 1-.714-2.596l-.005-.083-.002-.02v-.056l-.003-.073v-.096l-.003-.104v-.07l.003-.163c.008-.22.026-.45.054-.678a8.707 8.707 0 0 1 .28-1.355c.128-.444.286-.872.473-1.277a7.04 7.04 0 0 1 1.456-2.1 5.925 5.925 0 0 1 .953-.763c.169-.111.343-.213.524-.306.089-.05.182-.091.273-.135.047-.02.093-.042.138-.062a7.177 7.177 0 0 1 .714-.267l.145-.045c.049-.015.098-.026.148-.041.098-.029.197-.052.296-.076.049-.013.1-.02.15-.033l.15-.032.151-.028.076-.013.075-.01.153-.024c.057-.01.114-.013.171-.023l.169-.021c.036-.003.073-.008.106-.01l.073-.008.036-.003.042-.002c.057-.003.114-.008.171-.01l.086-.006h.023l.037-.003.145-.007a7.999 7.999 0 0 1 1.708.125 7.917 7.917 0 0 1 2.048.68 8.253 8.253 0 0 1 1.672 1.09l.09.077.089.078c.06.052.114.107.171.159.057.052.112.106.166.16.052.055.107.107.159.164a8.671 8.671 0 0 1 1.41 1.978c.012.026.028.052.04.078l.04.078.075.156c.023.051.05.1.07.153l.065.15a8.848 8.848 0 0 1 .45 1.34.19.19 0 0 0 .201.142.186.186 0 0 0 .172-.184c.01-.246.002-.532-.024-.856z"/></symbol>
+<symbol id="i-n8n" viewBox="0 0 24 24"><path fill="currentColor" d="M4.8 16.8c.45 0 .6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4H9c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6s.6-.15.6-.6V15c0-1.8.6-2.4 2.4-2.4h1.2c.45 0 .6-.15.6-.6s-.15-.6-.6-.6h-1.2c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H15c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H7.8c-1.8 0-2.4-.6-2.4-2.4V7.8c0-.45-.15-.6-.6-.6s-.6.15-.6.6V9c0 1.8-.6 2.4-2.4 2.4H.6c-.45 0-.6.15-.6.6s.15.6.6.6h1.2c1.8 0 2.4.6 2.4 2.4v1.2c0 .45.15.6.6.6"/></symbol>
+<symbol id="i-posthog" viewBox="0 0 24 24"><path fill="currentColor" d="M9.854 14.5 5 9.647.854 5.5A.5.5 0 0 0 0 5.854V8.44a.5.5 0 0 0 .146.353L5 13.647l.147.146L9.854 18.5l.146.147v-.049c.065.03.134.049.207.049h2.586a.5.5 0 0 0 .353-.854L9.854 14.5zm0-5-4-4a.487.487 0 0 0-.409-.144.515.515 0 0 0-.356.21.493.493 0 0 0-.089.288V8.44a.5.5 0 0 0 .147.353l9 9a.5.5 0 0 0 .853-.354v-2.585a.5.5 0 0 0-.146-.354l-5-5zm1-4a.5.5 0 0 0-.854.354V8.44a.5.5 0 0 0 .147.353l4 4a.5.5 0 0 0 .853-.354V9.854a.5.5 0 0 0-.146-.354l-4-4zm12.647 11.515a3.863 3.863 0 0 1-2.232-1.1l-4.708-4.707a.5.5 0 0 0-.854.354v6.585a.5.5 0 0 0 .5.5H23.5a.5.5 0 0 0 .5-.5v-.6c0-.276-.225-.497-.499-.532zm-5.394.032a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zM.854 15.5a.5.5 0 0 0-.854.354v2.293a.5.5 0 0 0 .5.5h2.293c.222 0 .39-.135.462-.309a.493.493 0 0 0-.109-.545L.854 15.501zM5 14.647.854 10.5a.5.5 0 0 0-.854.353v2.586a.5.5 0 0 0 .146.353L4.854 18.5l.146.147h2.793a.5.5 0 0 0 .353-.854L5 14.647z"/></symbol>
+<symbol id="i-python" viewBox="0 0 24 24"><path fill="currentColor" d="M11.858 0c-.978.005-1.913.088-2.736.234C6.7.662 6.26 1.558 6.26 3.21v2.182h5.725v.727H4.111c-1.664 0-3.121 1-3.577 2.903-.526 2.181-.549 3.542 0 5.82.407 1.694 1.379 2.902 3.043 2.902h1.969v-2.616c0-1.89 1.635-3.557 3.576-3.557h5.72c1.591 0 2.862-1.31 2.862-2.91v-5.45c0-1.553-1.309-2.718-2.863-2.977A18 18 0 0 0 11.858 0M8.762 1.755c.591 0 1.074.491 1.074 1.095 0 .601-.483 1.087-1.074 1.087A1.08 1.08 0 0 1 7.688 2.85c0-.604.48-1.095 1.074-1.095m9.656 4.364v2.543c0 1.971-1.671 3.63-3.577 3.63H9.122c-1.566 0-2.862 1.34-2.862 2.91v5.452c0 1.551 1.349 2.464 2.862 2.91 1.813.532 3.55.628 5.72 0 1.44-.418 2.862-1.258 2.862-2.91V18.47h-5.719v-.727h8.582c1.664 0 2.284-1.16 2.862-2.903.598-1.793.573-3.518 0-5.819-.41-1.656-1.196-2.903-2.862-2.903zm-3.216 13.807a1.08 1.08 0 0 1 1.074 1.088c0 .604-.48 1.094-1.074 1.094-.592 0-1.075-.49-1.075-1.094 0-.601.483-1.088 1.075-1.088"/></symbol>
+<symbol id="i-temporal" viewBox="0 0 24 24"><path fill="currentColor" d="M16.206 7.794C15.64 3.546 14.204 0 12 0 9.796 0 8.361 3.546 7.794 7.794 3.546 8.36 0 9.796 0 12c0 2.204 3.546 3.639 7.794 4.206C8.36 20.453 9.796 24 12 24c2.204 0 3.639-3.546 4.206-7.794C20.454 15.64 24 14.204 24 12c0-2.204-3.547-3.64-7.794-4.206Zm-8.55 7.174c-4.069-.587-6.44-1.932-6.44-2.969 0-1.036 2.372-2.381 6.44-2.969-.09.98-.137 1.98-.137 2.97 0 .99.047 1.99.137 2.968zM12 1.215c1.036 0 2.381 2.372 2.969 6.44a32.718 32.718 0 0 0-5.938 0c.587-4.068 1.932-6.44 2.969-6.44Zm4.344 13.753c-.2.03-1.022.126-1.23.146-.02.209-.117 1.03-.145 1.23-.588 4.068-1.933 6.44-2.97 6.44-1.036 0-2.38-2.372-2.968-6.44-.03-.2-.126-1.022-.147-1.23a31.833 31.833 0 0 1 0-6.23 31.813 31.813 0 0 1 7.46.146c4.068.587 6.442 1.933 6.442 2.969-.001 1.036-2.374 2.382-6.442 2.97z"/></symbol>
+<defs>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head" d="M0 0 10 5 0 10z"/></marker>
+</defs>
 </svg>
 
 <div class="wrap">
   <header>
     <p class="eyebrow">Formação FDE · caso Já Chegou</p>
-    <h1>Arquitetura de referência.<br><em>Claude Code, um MCP na Cloudflare e o Supabase.</em></h1>
-    <p class="lead">Uma proposta de stack para o grupo partir: o agente roda no Claude Code, as tools do caso ficam num servidor MCP próprio num Cloudflare Worker, e os dados ficam no Supabase. O GitHub guarda o código e publica as duas pontas.</p>
+    <h1>Arquitetura de referência.<br><span>Tudo em TypeScript, na Cloudflare.</span></h1>
+    <p class="lead">Uma stack para o grupo partir. Cada peça pode ser trocada.</p>
+    <ul class="stack" aria-label="A stack">
+      <li><svg role="img" aria-label="TypeScript" style="color:var(--ts)"><use href="#i-typescript"/></svg>TypeScript</li>
+      <li><svg role="img" aria-label="Cloudflare Workers" style="color:var(--cf)"><use href="#i-cloudflareworkers"/></svg>Workers e Cron</li>
+      <li><svg role="img" aria-label="Cloudflare" style="color:var(--cf)"><use href="#i-cloudflare"/></svg>Access</li>
+      <li><svg role="img" aria-label="Claude" style="color:var(--claude)"><use href="#i-claude"/></svg>Claude, pelo SDK</li>
+      <li><svg role="img" aria-label="Cloudflare" style="color:var(--cf)"><use href="#i-cloudflare"/></svg>Clef, no Workers AI</li>
+      <li><svg role="img" aria-label="Supabase" style="color:var(--sb)"><use href="#i-supabase"/></svg>Supabase em São Paulo</li>
+      <li><svg role="img" aria-label="GitHub" style="color:var(--fg)"><use href="#i-github"/></svg>GitHub Actions</li>
+    </ul>
   </header>
 
-  <section aria-labelledby="fluxo">
-    <h2 id="fluxo">O fluxo</h2>
-    <div class="flow">
-      <div class="node claude">
-        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><span class="vendor">Agente</span></div>
-        <p class="name">Claude Code</p>
-        <p class="what">Lê as notas pelo MCP, aplica as skills e grava a proposta. No terminal, no app ou num job.</p>
-      </div>
-      <div class="edge">
-        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <div><p class="proto">MCP por HTTP</p><p class="auth">token Bearer</p></div>
-      </div>
-      <div class="node cf">
-        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><span class="vendor">Cloudflare Workers</span></div>
-        <p class="name">Servidor MCP</p>
-        <p class="what">As tools do caso: ler nota, pedido e recebimento, e registrar a proposta. Publicado com o Wrangler.</p>
-      </div>
-      <div class="edge">
-        <svg class="arrow h" viewBox="0 0 88 14" preserveAspectRatio="none" aria-hidden="true"><path d="M2 7H82M76 2l6 5-6 5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <svg class="arrow v" viewBox="0 0 14 40" aria-hidden="true"><path d="M7 2V34M2 28l5 6 5-6" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
-        <div><p class="proto">supabase-js</p><p class="auth">chave secreta no Worker</p></div>
-      </div>
-      <div class="node sb">
-        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><span class="vendor">Supabase</span></div>
-        <p class="name">Banco e auth</p>
-        <p class="what">Postgres com notas, pedidos de compra, recebimentos da doca e as propostas do agente. Auth e Storage se precisar.</p>
-      </div>
+  <section aria-labelledby="camadas">
+    <h2 id="camadas">As camadas</h2>
+    <p class="hint">Arraste o diagrama para o lado para ver tudo.</p>
+    <div class="diagram-wrap" tabindex="0" role="region" aria-label="Diagrama das camadas, rolável na horizontal">
+      <svg class="diagram" viewBox="0 0 1200 780" role="img" aria-labelledby="dg-t dg-d">
+        <title id="dg-t">Arquitetura de referência do Já Chegou em camadas</title>
+        <desc id="dg-d">Quem aprova passa pelo Cloudflare Access e chega à tela, um Worker. A tela chama a API, outro Worker, com Cron. O Claude Code de cada um chama o servidor MCP, um terceiro Worker, que chama a API. A API usa o Clef pelo Workers AI, chama o Claude pelo SDK da Anthropic, lê os sistemas pelos conectores, que hoje são mocks da base do kit, e é a única que fala com o Supabase em São Paulo. As GitHub Actions publicam os Workers e aplicam as migrações.</desc>
+
+        <rect class="band-user" x="10" y="10" width="1180" height="132" rx="18"/>
+        <rect class="band-cf" x="10" y="172" width="1180" height="290" rx="18"/>
+        <rect class="band-out" x="10" y="492" width="1180" height="166" rx="18"/>
+        <rect class="band-out" x="10" y="688" width="1180" height="82" rx="18"/>
+
+        <!-- quem usa -->
+        <rect class="box" x="30" y="48" width="380" height="78" rx="14"/>
+        <text class="t" x="52" y="81">Quem aprova</text>
+        <text class="s" x="52" y="107">No navegador, com o e-mail da empresa.</text>
+
+        <rect class="box-ink" x="790" y="48" width="380" height="78" rx="14"/>
+        <use href="#i-claude" x="810" y="62" width="24" height="24" class="c-claude"/>
+        <text class="t-ink" x="844" y="81">Claude Code</text>
+        <text class="s-ink" x="810" y="107">Na máquina de cada um, opcional.</text>
+
+        <!-- cloudflare -->
+        <rect class="box-gate" x="30" y="210" width="380" height="54" rx="12"/>
+        <use href="#i-cloudflare" x="50" y="225" width="24" height="24" class="c-cf"/>
+        <text class="t" x="84" y="244">Cloudflare Access</text>
+
+        <rect class="box-cf" x="30" y="290" width="380" height="150" rx="14"/>
+        <use href="#i-typescript" x="52" y="308" width="24" height="24" class="c-ts"/>
+        <text class="t" x="86" y="327">Tela</text>
+        <text class="s" x="52" y="364">Worker com React.</text>
+        <text class="s" x="52" y="388">Fala só com a API.</text>
+
+        <rect class="box-cf" x="470" y="210" width="260" height="230" rx="14"/>
+        <use href="#i-cloudflareworkers" x="492" y="228" width="24" height="24" class="c-cf"/>
+        <text class="t" x="526" y="247">API</text>
+        <text class="s" x="492" y="284">Worker em TypeScript,</text>
+        <text class="s" x="492" y="306">com Cron Trigger.</text>
+        <text class="s" x="492" y="344">A única peça que fala</text>
+        <text class="s" x="492" y="366">com o banco.</text>
+
+        <rect class="box-cf" x="790" y="210" width="380" height="96" rx="14"/>
+        <use href="#i-modelcontextprotocol" x="810" y="226" width="24" height="24" class="c-fg"/>
+        <text class="t" x="844" y="245">Servidor MCP</text>
+        <text class="s" x="810" y="284">Worker. Chama a API, nunca o banco.</text>
+
+        <rect class="box-cf" x="790" y="330" width="380" height="110" rx="14"/>
+        <use href="#i-cloudflare" x="810" y="346" width="24" height="24" class="c-cf"/>
+        <text class="t" x="844" y="365">Clef · Workers AI</text>
+        <text class="s" x="810" y="402">O modelo de decisão da Cloudflare,</text>
+        <text class="s" x="810" y="424">pelo binding, sem chave à parte.</text>
+
+        <!-- fora da cloudflare -->
+        <rect class="box" x="30" y="530" width="380" height="110" rx="14"/>
+        <text class="t" x="52" y="563">Conectores</text>
+        <text class="s" x="52" y="594">SEFAZ · ERP · WMS · Banco</text>
+        <text class="s" x="52" y="618">Hoje, mocks com a base do kit.</text>
+
+        <rect class="box-sb" x="470" y="530" width="260" height="110" rx="14"/>
+        <use href="#i-supabase" x="492" y="546" width="24" height="24" class="c-sb"/>
+        <text class="t" x="526" y="565">Supabase</text>
+        <text class="s" x="492" y="594">Banco e storage.</text>
+        <text class="s" x="492" y="618">Em São Paulo.</text>
+
+        <rect class="box-ink" x="790" y="530" width="380" height="110" rx="14"/>
+        <use href="#i-anthropic" x="810" y="546" width="24" height="24" style="color:var(--ink-fg)"/>
+        <text class="t-ink" x="844" y="565">Claude · API da Anthropic</text>
+        <text class="s-ink" x="810" y="594">SDK oficial em TypeScript,</text>
+        <text class="s-ink" x="810" y="618">com saída estruturada.</text>
+
+        <!-- código -->
+        <rect class="box" x="30" y="706" width="1140" height="46" rx="12"/>
+        <use href="#i-github" x="50" y="717" width="24" height="24" class="c-fg"/>
+        <text class="t" x="84" y="736" style="font-size:18px">GitHub Actions</text>
+        <text class="s" x="246" y="736">publicam os Workers e aplicam as migrações. Só isso.</text>
+
+        <!-- setas -->
+        <path class="edge" d="M220 126 V208" marker-end="url(#arw)"/>
+        <path class="edge" d="M220 264 V288" marker-end="url(#arw)"/>
+        <path class="edge" d="M980 126 V208" marker-end="url(#arw)"/>
+        <path class="edge" d="M410 365 H468" marker-end="url(#arw)"/>
+        <path class="edge" d="M790 258 H732" marker-end="url(#arw)"/>
+        <path class="edge" d="M730 385 H788" marker-end="url(#arw)"/>
+        <path class="edge" d="M520 440 V476 H220 V528" marker-end="url(#arw)"/>
+        <path class="edge" d="M600 440 V528" marker-end="url(#arw)"/>
+        <path class="edge" d="M680 440 V476 H980 V528" marker-end="url(#arw)"/>
+
+        <text class="lbl" x="232" y="166">HTTPS</text>
+        <text class="lbl" x="992" y="166">MCP por HTTP</text>
+        <text class="lbl" x="439" y="356" text-anchor="middle">/api</text>
+        <text class="lbl" x="612" y="500">chave secreta</text>
+
+        <text class="band-label" x="30" y="34">Quem usa</text>
+        <text class="band-label" x="30" y="196">Cloudflare Workers</text>
+        <text class="band-label" x="30" y="516">Fora da Cloudflare</text>
+      </svg>
     </div>
-    <div class="below">
-      <div class="node gh">
-        <svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg>
-        <div class="text">
-          <span class="vendor">GitHub</span>
-          <p class="name">Repositório e Actions</p>
-          <p class="what">O fork guarda o código do Worker e as migrações do Supabase. Cada merge na main publica o Worker e aplica as migrações. O Claude Code também pode rodar num job, com o token do <code>claude setup-token</code>.</p>
-        </div>
-      </div>
+  </section>
+
+  <section aria-labelledby="regras">
+    <h2 id="regras">Três regras <span>da stack</span></h2>
+    <div class="rules">
+      <div><b>Só o Worker fala com o banco.</b><span>RLS ligado em toda tabela e nenhuma política: a chave pública não lê nada. O navegador e o MCP passam pela API.</span></div>
+      <div><b>Dados fiscais no Brasil.</b><span>O cliente exige. O Supabase fica em São Paulo e serve só de banco e storage, sem o Auth dele.</span></div>
+      <div><b>O mock troca sem dor.</b><span>Um conector por sistema, todos com a mesma interface. Trocar a base do kit pela fonte real muda só o conector.</span></div>
     </div>
   </section>
 
   <section aria-labelledby="pecas">
     <h2 id="pecas">Peça a peça</h2>
     <div class="pieces">
-      <article class="piece claude">
-        <div class="head"><svg class="logo" role="img" aria-label="Claude"><use href="#i-claude"/></svg><h3>Claude Code</h3></div>
-        <ul>
-          <li>Na máquina, entra com a conta de cada um.</li>
-          <li>Fora dela, num job ou servidor, usa um token de longa duração da assinatura, gerado uma vez.</li>
-          <li>O servidor MCP entra como qualquer outro, apontando para a URL do Worker.</li>
-        </ul>
-<pre><span class="c"># token de longa duração, para jobs</span>
-claude setup-token
-<span class="c"># no job: CLAUDE_CODE_OAUTH_TOKEN=&lt;token&gt;</span>
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cf)"><use href="#i-cloudflare"/></svg></span><h3>Tela e Access</h3></div>
+        <p>Um Worker com React. O Access fica na frente: entra quem tem o e-mail liberado, com código por e-mail ou SSO.</p>
+<pre tabindex="0"><span class="c"># criar e publicar</span>
+npm create cloudflare@latest -- ja-chegou-web --framework=react
+cd ja-chegou-web
+npx wrangler deploy
 
-<span class="c"># ligar o MCP do caso</span>
+<span class="c"># no painel: Zero Trust › Access › Applications</span>
+<span class="c"># a API confere o cabeçalho Cf-Access-Jwt-Assertion</span>
+npm install jose</pre>
+      </article>
+
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Cloudflare Workers" style="color:var(--cf)"><use href="#i-cloudflareworkers"/></svg></span><h3>API com Cron</h3></div>
+        <p>Um Worker em TypeScript com as rotas da tela e um Cron Trigger para o que roda sozinho.</p>
+<pre tabindex="0">npm create cloudflare@latest -- ja-chegou-api --type=hello-world --ts
+
+<span class="c">// wrangler.jsonc</span>
+"triggers": { "crons": ["0 * * * *"] },
+"ai": { "binding": "AI" }
+
+<span class="c">// src/index.ts</span>
+export default {
+  async fetch(req, env) { <span class="c">/* rotas da tela */</span> },
+  async scheduled(controller, env, ctx) { <span class="c">/* o que roda sozinho */</span> },
+} satisfies ExportedHandler&lt;Env&gt;;
+
+npx wrangler dev
+npx wrangler deploy</pre>
+      </article>
+
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Claude" style="color:var(--claude)"><use href="#i-claude"/></svg><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cf)"><use href="#i-cloudflare"/></svg></span><h3>Claude e Clef</h3></div>
+        <p>O Claude pelo SDK oficial, com a saída validada por um esquema. O Clef pelo binding do Workers AI.</p>
+<pre tabindex="0">npm install @anthropic-ai/sdk zod
+npx wrangler secret put ANTHROPIC_API_KEY
+
+import Anthropic from "@anthropic-ai/sdk";
+import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
+
+const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+const r = await client.messages.parse({
+  model: "claude-opus-5-5",
+  max_tokens: 16000,
+  messages: [{ role: "user", content: pergunta }],
+  output_config: { format: zodOutputFormat(Esquema) },
+});
+r.parsed_output;  <span class="c">// null se não validou</span>
+
+<span class="c">// Clef: o id do modelo está no catálogo do Workers AI</span>
+await env.AI.run(MODELO_CLEF, entrada);</pre>
+      </article>
+
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Model Context Protocol" style="color:var(--fg)"><use href="#i-modelcontextprotocol"/></svg></span><h3>Servidor MCP</h3></div>
+        <p>Opcional. Um Worker que expõe tools ao Claude Code e chama a API, nunca o banco.</p>
+<pre tabindex="0">npm create cloudflare@latest -- ja-chegou-mcp \
+  --template=cloudflare/ai/demos/remote-mcp-authless
+npx wrangler deploy
+
+<span class="c"># ligar no Claude Code, no escopo local (o padrão)</span>
 claude mcp add --transport http ja-chegou \
-  https://ja-chegou-mcp.&lt;conta&gt;.workers.dev/mcp \
-  --header "Authorization: Bearer $MCP_TOKEN"</pre>
+  https://ja-chegou-mcp.&lt;subdominio&gt;.workers.dev/mcp</pre>
       </article>
 
-      <article class="piece cf">
-        <div class="head"><svg class="logo" role="img" aria-label="Cloudflare"><use href="#i-cloudflare"/></svg><h3>Servidor MCP no Worker</h3></div>
-        <ul>
-          <li>Um Worker que fala MCP por HTTP, com as tools do caso.</li>
-          <li>Confere o token Bearer antes de qualquer tool.</li>
-          <li>Os segredos ficam no Worker, nunca no código nem no repositório.</li>
-        </ul>
-<pre><span class="c"># criar o projeto</span>
-npm create cloudflare@latest -- ja-chegou-mcp
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="TypeScript" style="color:var(--ts)"><use href="#i-typescript"/></svg></span><h3>Conectores</h3></div>
+        <p>Um por sistema: SEFAZ, ERP, WMS e banco. Hoje leem a base do kit.</p>
+<pre tabindex="0"><span class="c">// conectores/tipos.ts</span>
+export interface Conector&lt;T&gt; {
+  listar(desde: Date): Promise&lt;T[]&gt;;
+}
 
-<span class="c"># segredos do Worker</span>
-wrangler secret put MCP_TOKEN
-wrangler secret put SUPABASE_SECRET_KEY
-
-<span class="c"># publicar</span>
-wrangler deploy</pre>
+<span class="c">// conectores/erp.mock.ts lê a base do kit;</span>
+<span class="c">// conectores/erp.ts, um dia, fala com o ERP de verdade</span></pre>
       </article>
 
-      <article class="piece sb">
-        <div class="head"><svg class="logo" role="img" aria-label="Supabase"><use href="#i-supabase"/></svg><h3>Supabase</h3></div>
-        <ul>
-          <li>Local com Docker para desenvolver, na nuvem para publicar.</li>
-          <li>O esquema vive em migrações versionadas no repositório.</li>
-          <li>Só o Worker conhece a chave secreta. O Claude Code nunca fala direto com o banco.</li>
-        </ul>
-<pre><span class="c"># local</span>
-supabase init
-supabase start
-supabase migration new criar_tabelas
+      <article class="piece">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--sb)"><use href="#i-supabase"/></svg></span><h3>Supabase em São Paulo</h3></div>
+        <p>Banco e storage. O projeto nasce em <code>sa-east-1</code>, e o esquema vive em migrações no fork.</p>
+<pre tabindex="0">npx supabase projects create ja-chegou --region sa-east-1
+npx supabase init
+npx supabase migration new esquema_inicial
+npx supabase link
+npx supabase db push
 
-<span class="c"># nuvem</span>
-supabase link --project-ref &lt;ref&gt;
-supabase db push --remote</pre>
+<span class="c">-- em toda tabela: RLS ligado, nenhuma política</span>
+alter table public.minha_tabela enable row level security;
+
+<span class="c"># só a API guarda a chave secreta</span>
+npx wrangler secret put SUPABASE_SECRET_KEY</pre>
       </article>
 
-      <article class="piece gh">
-        <div class="head"><svg class="logo" role="img" aria-label="GitHub"><use href="#i-github"/></svg><h3>GitHub</h3></div>
-        <ul>
-          <li>Fork, branch e pull request, como em qualquer projeto.</li>
-          <li>Actions publica o Worker e aplica as migrações depois do merge.</li>
-          <li>Os tokens da Cloudflare, do Supabase e do Claude ficam nos secrets do repositório.</li>
-        </ul>
-<pre><span class="c"># secrets do repositório</span>
-gh secret set CLOUDFLARE_API_TOKEN
+      <article class="piece" style="grid-column:1 / -1">
+        <div class="head"><span class="logos"><svg class="logo" role="img" aria-label="GitHub" style="color:var(--fg)"><use href="#i-github"/></svg></span><h3>GitHub Actions</h3></div>
+        <p>Depois do merge na <code>main</code>, publicam os Workers e aplicam as migrações. Só isso.</p>
+<pre tabindex="0">gh secret set CLOUDFLARE_API_TOKEN
 gh secret set CLOUDFLARE_ACCOUNT_ID
 gh secret set SUPABASE_ACCESS_TOKEN
 gh secret set SUPABASE_DB_PASSWORD
-gh secret set CLAUDE_CODE_OAUTH_TOKEN
 
-<span class="c"># actions: cloudflare/wrangler-action@v4</span>
-<span class="c">#          supabase/setup-cli@v3</span>
-<span class="c">#          anthropics/claude-code-action@v1</span></pre>
+<span class="c"># actions: cloudflare/wrangler-action e supabase/setup-cli</span></pre>
       </article>
     </div>
   </section>
 
   <section aria-labelledby="auth">
-    <h2 id="auth">Quem se autentica onde</h2>
-    <div class="table-wrap">
+    <h2 id="auth">Quem guarda <span>qual chave</span></h2>
+    <div class="table-wrap" tabindex="0" role="region" aria-label="Credenciais por salto">
       <table>
         <thead><tr><th>Salto</th><th>Credencial</th><th>Onde fica</th></tr></thead>
         <tbody>
-          <tr><td>Você → Claude Code</td><td>Login da sua conta, ou o token do <code>claude setup-token</code> num job</td><td>Na sua máquina, ou em <code>CLAUDE_CODE_OAUTH_TOKEN</code> nos secrets do repositório</td></tr>
-          <tr><td>Claude Code → MCP</td><td>Token Bearer no cabeçalho <code>Authorization</code></td><td>No <code>claude mcp add</code> de cada um e no secret <code>MCP_TOKEN</code> do Worker</td></tr>
-          <tr><td>MCP → Supabase</td><td>Chave secreta do projeto</td><td>Só no secret <code>SUPABASE_SECRET_KEY</code> do Worker</td></tr>
-          <tr><td>Actions → Cloudflare</td><td>API token e ID da conta</td><td><code>CLOUDFLARE_API_TOKEN</code> e <code>CLOUDFLARE_ACCOUNT_ID</code> nos secrets do repositório</td></tr>
-          <tr><td>Actions → Supabase</td><td>Access token pessoal e senha do banco</td><td><code>SUPABASE_ACCESS_TOKEN</code> e <code>SUPABASE_DB_PASSWORD</code> nos secrets do repositório</td></tr>
+          <tr><td>Pessoa → Tela</td><td>Login do Cloudflare Access</td><td>No navegador, em cookie</td></tr>
+          <tr><td>Tela → API</td><td>O token do Access, conferido pela API</td><td>No cabeçalho <code>Cf-Access-Jwt-Assertion</code></td></tr>
+          <tr><td>API → Supabase</td><td>A chave secreta</td><td>Secret do Worker da API</td></tr>
+          <tr><td>API → Claude</td><td>A chave da API da Anthropic</td><td>Secret do Worker da API</td></tr>
+          <tr><td>API → Clef</td><td>O binding <code>AI</code>, sem chave</td><td>No <code>wrangler.jsonc</code></td></tr>
+          <tr><td>Actions → Cloudflare e Supabase</td><td>Tokens de publicação e senha do banco</td><td>Secrets do repositório</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="note"><strong>O fork é público.</strong> Nenhum desses tokens entra em commit, no código ou no <code>.env</code> versionado. Eles vivem nos secrets do Worker, nos secrets do repositório ou na sua máquina.</p>
   </section>
 
-  <footer>Um ponto de partida, não a solução do caso: cada peça pode ser trocada. Ícones de Simple Icons; as marcas são de seus donos.</footer>
+  <section aria-labelledby="ferramentas">
+    <h2 id="ferramentas">Awesome tools para builders</h2>
+    <div class="tools-group">
+      <h3>Na stack do curso</h3>
+      <div class="tools">
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Claude" style="color:var(--claude)"><use href="#i-claude"/></svg><h4>Claude</h4></div>
+          <p class="role">O agente: constrói e roda.</p>
+          <p class="when">Sempre. É o ponto de partida de qualquer outra ferramenta daqui.</p>
+          <ul><li><a href="https://code.claude.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://code.claude.com/docs/en/mcp" target="_blank" rel="noopener">MCP no Claude Code</a></li><li><a href="https://code.claude.com/docs/en/skills" target="_blank" rel="noopener">Skills</a></li><li><a href="https://code.claude.com/docs/en/sub-agents" target="_blank" rel="noopener">Subagentes</a></li><li><a href="https://github.com/anthropics/claude-code-action" target="_blank" rel="noopener">Claude Code no GitHub Actions</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">Ah</span><h4>Ahrena Framework</h4></div>
+          <p class="role">O time de agentes que constrói e revisa: a Athena planeja e distribui, os builders constroem camada a camada e o Argos revisa cada PR.</p>
+          <p class="when">O trabalho vira código que vai para produção: issue, plano, PRs revisados e merge na main.</p>
+          <ul><li><a href="https://github.com/ahrenatechnology/ahrena-framework" target="_blank" rel="noopener">Repositório e instalação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="git e GitHub" style="color:var(--fg)"><use href="#i-github"/></svg><h4>git e GitHub</h4></div>
+          <p class="role">Fork, PRs, issues e Actions.</p>
+          <p class="when">Em todo o trabalho: o front, o backend e as migrações vivem no fork.</p>
+          <ul><li><a href="https://cli.github.com/manual/" target="_blank" rel="noopener">GitHub CLI</a></li><li><a href="https://docs.github.com/actions" target="_blank" rel="noopener">GitHub Actions</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>Supabase</h4></div>
+          <p class="role">Banco, autenticação e storage.</p>
+          <p class="when">O projeto precisa guardar dados do cliente, com login e regras de quem vê cada registro.</p>
+          <ul><li><a href="https://supabase.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://supabase.com/docs/reference/cli" target="_blank" rel="noopener">CLI</a></li><li><a href="https://supabase.com/docs/guides/deployment/database-migrations" target="_blank" rel="noopener">Migrações</a></li><li><a href="https://supabase.com/docs/guides/getting-started/mcp" target="_blank" rel="noopener">Servidor MCP</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Cloudflare" style="color:var(--cloudflare)"><use href="#i-cloudflare"/></svg><h4>Cloudflare</h4></div>
+          <p class="role">O front em Astro, o FastAPI e o servidor MCP, cada um num Worker, com o Cron dos lembretes.</p>
+          <p class="when">Publicar uma API ou uma página sem cuidar de infraestrutura.</p>
+          <ul><li><a href="https://developers.cloudflare.com/workers/" target="_blank" rel="noopener">Workers</a></li><li><a href="https://developers.cloudflare.com/workers/wrangler/" target="_blank" rel="noopener">Wrangler</a></li><li><a href="https://developers.cloudflare.com/workers/configuration/cron-triggers/" target="_blank" rel="noopener">Cron Triggers</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li><li><a href="https://github.com/cloudflare/python-workers-examples/tree/main/mcp-server" target="_blank" rel="noopener">Exemplo de servidor MCP</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Astro" style="color:var(--astro)"><use href="#i-astro"/></svg><h4>Astro</h4></div>
+          <p class="role">O framework de front-end: a tela de quem aprova, com ilhas React.</p>
+          <p class="when">O agente precisa de uma interface: listar as propostas, mostrar a nota e registrar a decisão de uma pessoa.</p>
+          <ul><li><a href="https://docs.astro.build/en/getting-started/" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://docs.astro.build/en/guides/deploy/cloudflare/" target="_blank" rel="noopener">Deploy na Cloudflare</a></li><li><a href="https://docs.astro.build/en/guides/backend/supabase/" target="_blank" rel="noopener">Astro com Supabase</a></li><li><a href="https://docs.astro.build/en/guides/integrations-guide/react/" target="_blank" rel="noopener">Ilhas React</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">FM</span><h4>FastMCP</h4></div>
+          <p class="role">Alternativa, fora da stack: um framework de MCP em Python com login OAuth e hospedagem própria, o FastMCP Gateway.</p>
+          <p class="when">O grupo quer o login OAuth de cada pessoa no MCP, em vez do token único. Não é o caminho desta arquitetura.</p>
+          <ul><li><a href="https://gofastmcp.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://gofastmcp.com/integrations/supabase" target="_blank" rel="noopener">Login com o Supabase</a></li><li><a href="https://gofastmcp.com/deployment/fastmcp-cloud" target="_blank" rel="noopener">FastMCP Gateway</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>Python</h4></div>
+          <p class="role">A linguagem do backend, do kit e das tools.</p>
+          <p class="when">O FastAPI, o servidor MCP, os scripts e os testes do projeto.</p>
+          <ul><li><a href="https://docs.astral.sh/uv/" target="_blank" rel="noopener">uv</a></li><li><a href="https://docs.pytest.org" target="_blank" rel="noopener">pytest</a></li><li><a href="https://docs.pydantic.dev" target="_blank" rel="noopener">Pydantic</a></li><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li><li><a href="https://py.sdk.modelcontextprotocol.io/" target="_blank" rel="noopener">SDK de MCP em Python</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Docker" style="color:#2496ED"><use href="#i-docker"/></svg><h4>Docker</h4></div>
+          <p class="role">Sobe o Supabase local.</p>
+          <p class="when">Desenvolver com o banco na sua máquina antes de publicar. No Mac, com o Colima.</p>
+          <ul><li><a href="https://supabase.com/docs/guides/local-development" target="_blank" rel="noopener">Supabase local</a></li><li><a href="https://github.com/abiosoft/colima" target="_blank" rel="noopener">Colima</a></li></ul>
+        </article>
+      </div>
+    </div>
+    <div class="tools-group">
+      <h3>Para depois do primeiro agente</h3>
+      <div class="tools">
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Resend" style="color:var(--fg)"><use href="#i-resend"/></svg><h4>Resend</h4></div>
+          <p class="role">E-mail: avisar quem aprova.</p>
+          <p class="when">O agente precisa avisar uma pessoa: uma aprovação pendente, um resumo do dia, uma exceção.</p>
+          <ul><li><a href="https://resend.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://github.com/resend/resend-python" target="_blank" rel="noopener">SDK de Python</a></li><li><a href="https://github.com/resend/mcp-send-email" target="_blank" rel="noopener">Servidor MCP</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="FastAPI" style="color:var(--fastapi)"><use href="#i-fastapi"/></svg><h4>FastAPI</h4></div>
+          <p class="role">Um framework web em Python para escrever APIs, com a validação do Pydantic.</p>
+          <p class="when">O backend do grupo for em Python. Roda num Python Worker da Cloudflare.</p>
+          <ul><li><a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/" target="_blank" rel="noopener">Workers em Python</a></li><li><a href="https://developers.cloudflare.com/workers/languages/python/packages/fastapi/" target="_blank" rel="noopener">FastAPI num Python Worker</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Python" style="color:var(--python)"><use href="#i-python"/></svg><h4>Servidor MCP em Python</h4></div>
+          <p class="role">Um servidor MCP num Python Worker, com o SDK oficial de MCP em Python.</p>
+          <p class="when">As tools do agente forem escritas em Python. O ponto de partida é o exemplo <code>mcp-server</code> da Cloudflare.</p>
+          <ul><li><a href="https://github.com/cloudflare/python-workers-examples" target="_blank" rel="noopener">Exemplos de Python Workers</a></li><li><a href="https://github.com/modelcontextprotocol/python-sdk" target="_blank" rel="noopener">SDK de MCP em Python</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>Supabase Auth</h4></div>
+          <p class="role">O login do próprio Supabase: e-mail, link mágico ou SSO, com o papel da pessoa dentro do JWT por um hook.</p>
+          <p class="when">O produto precisar de contas e papéis dentro do app, e não só de um portão na frente.</p>
+          <ul><li><a href="https://supabase.com/docs/guides/auth" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://supabase.com/docs/guides/auth/auth-hooks/custom-access-token-hook" target="_blank" rel="noopener">Custom Access Token Hook</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Supabase" style="color:var(--supabase)"><use href="#i-supabase"/></svg><h4>Políticas de RLS</h4></div>
+          <p class="role">Regras no próprio Postgres sobre quem lê e quem altera cada linha, lidas do JWT de quem chama.</p>
+          <p class="when">Mais de um cliente chamar o banco direto, como o navegador ou o MCP, e o banco precisar recusar o que não cabe a cada um.</p>
+          <ul><li><a href="https://supabase.com/docs/guides/database/postgres/row-level-security" target="_blank" rel="noopener">Row Level Security</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">EA</span><h4>Evolution API</h4></div>
+          <p class="role">WhatsApp: pedir a aprovação onde a pessoa está.</p>
+          <p class="when">Quem decide vive no WhatsApp. O modo pelo WhatsApp Web não é oficial e pode levar ao bloqueio do número: para produção, use a WhatsApp Cloud API, a oficial da Meta.</p>
+          <ul><li><a href="https://doc.evolution-api.com" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://developers.facebook.com/docs/whatsapp/cloud-api" target="_blank" rel="noopener">WhatsApp Cloud API</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Temporal" style="color:var(--fg)"><use href="#i-temporal"/></svg><h4>Temporal</h4></div>
+          <p class="role">Fluxos longos: esperar a aprovação e retomar.</p>
+          <p class="when">O processo espera dias por uma resposta e não pode perder nenhum passo.</p>
+          <ul><li><a href="https://docs.temporal.io" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://github.com/temporalio/sdk-python" target="_blank" rel="noopener">SDK de Python</a></li><li><a href="https://docs.temporal.io/cli" target="_blank" rel="noopener">CLI</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Barte" style="color:var(--fg)"><use href="#i-barte"/></svg><h4>Barte</h4></div>
+          <p class="role">A plataforma de pagamentos da casa: pedidos, links de pagamento, assinaturas, cartão com 3DS e antifraude, Pix e conta PJ, com sandbox para testar.</p>
+          <p class="when">O produto cobra o cliente. Desenvolva sempre no sandbox.</p>
+          <ul><li><a href="https://docs.barte.com" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="MCP Inspector" style="color:var(--fg)"><use href="#i-modelcontextprotocol"/></svg><h4>MCP Inspector</h4></div>
+          <p class="role">Abre o servidor MCP sem o Claude, lista as tools e chama uma por uma.</p>
+          <p class="when">Subir o servidor MCP e ele não responder como esperado. Roda com <code>npx @modelcontextprotocol/inspector</code>.</p>
+          <ul><li><a href="https://modelcontextprotocol.io/docs/tools/inspector" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">LF</span><h4>Langfuse</h4></div>
+          <p class="role">Rastreia cada chamada do agente, com prompt, tools, custo e tempo, e guarda os resultados dos evals.</p>
+          <p class="when">Comparar uma versão do agente com a anterior.</p>
+          <ul><li><a href="https://langfuse.com/docs" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="PostHog" style="color:var(--fg)"><use href="#i-posthog"/></svg><h4>PostHog</h4></div>
+          <p class="role">Métricas de uso, gravação das sessões, feature flags e acompanhamento das chamadas de LLM.</p>
+          <p class="when">Pessoas de verdade começarem a usar o produto.</p>
+          <ul><li><a href="https://posthog.com/docs" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://posthog.com/docs/ai-observability" target="_blank" rel="noopener">AI Observability</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Grafana" style="color:#F46800"><use href="#i-grafana"/></svg><h4>Grafana</h4></div>
+          <p class="role">Painéis de métricas e logs, com plano gratuito no Grafana Cloud.</p>
+          <p class="when">A operação precisar acompanhar o agente em produção: volume, erros, tempo de resposta.</p>
+          <ul><li><a href="https://grafana.com/docs/grafana/latest/" target="_blank" rel="noopener">Documentação</a></li><li><a href="https://grafana.com/products/cloud/" target="_blank" rel="noopener">Grafana Cloud</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="DuckDB" style="color:var(--fg)"><use href="#i-duckdb"/></svg><h4>DuckDB</h4></div>
+          <p class="role">SQL direto sobre CSV, JSON e Parquet, sem servidor.</p>
+          <p class="when">Analisar as notas, os pedidos e os erros do eval no seu computador.</p>
+          <ul><li><a href="https://duckdb.org/docs/" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="1Password CLI" style="color:#145FE4"><use href="#i-1password"/></svg><h4>1Password CLI</h4></div>
+          <p class="role">Guarda as chaves fora do repositório: com <code>op run</code>, o <code>.env</code> só tem referências <code>op://</code>. É pago, sem plano gratuito.</p>
+          <p class="when">O grupo dividir chaves de API entre si e alguém já tiver o plano.</p>
+          <ul><li><a href="https://developer.1password.com/docs/cli/" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><span class="initials" aria-hidden="true">PW</span><h4>Playwright</h4></div>
+          <p class="role">Testa a interface ponta a ponta, num navegador de verdade.</p>
+          <p class="when">O grupo tiver uma tela, como a de quem aprova.</p>
+          <ul><li><a href="https://playwright.dev/python/" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="n8n" style="color:#FF91AC"><use href="#i-n8n"/></svg><h4>n8n</h4></div>
+          <p class="role">Automações entre ferramentas, montadas visualmente.</p>
+          <p class="when">O fluxo for curto e não justificar o Temporal.</p>
+          <ul><li><a href="https://docs.n8n.io" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+        <article class="tool">
+          <div class="tool-head"><svg class="logo" role="img" aria-label="Bruno" style="color:#F4AA41"><use href="#i-bruno"/></svg><h4>Bruno</h4></div>
+          <p class="role">Chama e versiona as chamadas de API no próprio repositório, com as chaves lidas do <code>.env</code>.</p>
+          <p class="when">Testar as APIs do Supabase, do Resend ou da Barte sem escrever código.</p>
+          <ul><li><a href="https://docs.usebruno.com" target="_blank" rel="noopener">Documentação</a></li></ul>
+        </article>
+      </div>
+    </div>
+    <p class="more">Nenhuma das de baixo é pré-requisito para o fim de semana. A lista completa, com mais links, está no <a href="https://github.com/barte-ai-services/formacao-fde-case/blob/main/AWESOME.md" target="_blank" rel="noopener"><code>AWESOME.md</code></a> do case.</p>
+  </section>
+
+  <footer>Um ponto de partida de stack, não a solução do caso. Ícones de Simple Icons 16.37.0, e o da Barte vem do kit de marca dela; as marcas são de seus donos.</footer>
 </div>

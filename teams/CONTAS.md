@@ -73,13 +73,111 @@ wrangler login
 
 Quem tem acesso a mais de uma conta na Cloudflare (a pessoal e a do grupo) escolhe a do grupo no primeiro `wrangler deploy`, quando ele perguntar, ou fixa o `account_id` da conta do grupo no arquivo de configuração do Wrangler (`wrangler.jsonc` ou `wrangler.toml`).
 
+## Servidor MCP em Python: na conta do grupo na Cloudflare
+
+O servidor MCP do grupo roda como um **Python Worker** na mesma conta da Cloudflare. Não tem conta nova, ninguém precisa ser convidado de novo, e não tem servidor para manter: a Cloudflare sobe o Worker quando o Claude Code chama, sem custo no plano gratuito.
+
+O ponto de partida é o exemplo oficial da Cloudflare, um servidor MCP em Python com o SDK oficial do MCP: [python-workers-examples/mcp-server](https://github.com/cloudflare/python-workers-examples/tree/main/mcp-server).
+
+### Criar o servidor no fork
+
+No fork líder, peça ao Claude Code:
+
+> Copie o exemplo `mcp-server` do repositório `cloudflare/python-workers-examples` para a pasta `servidor-mcp/` deste fork. Chame o Worker de `ja-chegou-mcp` no `wrangler.jsonc`. Tire o banco D1 do `wrangler.jsonc` e do código: os dados ficam no Supabase. Troque as tools do exemplo pelas tools do caso, lendo e gravando no Supabase pela API REST, entrando como o usuário `agente`.
+
+Os dados ficam no Supabase, como na [arquitetura de referência](../artifacts/arquitetura-ja-chegou/index.html): o banco, o login das pessoas e as regras de quem pode o quê (RLS) moram lá. O exemplo usa o D1, o banco da própria Cloudflare, e por isso o D1 sai.
+
+O exemplo pede o Python 3.14. A `setup-fde` instala o 3.12, mas o `uv run` baixa o 3.14 sozinho na primeira vez.
+
+### Ligar o servidor ao Supabase como o agente
+
+O servidor não usa a chave secreta do Supabase, que passa por cima de todas as regras. Ele entra como um usuário comum, o `agente`, e o banco só deixa esse usuário ler o caso e gravar propostas.
+
+1. No painel do Supabase, em **Authentication** → **Users**, o líder cria o usuário do agente com **Add user**, com um e-mail do grupo e uma senha forte.
+2. Dê a esse usuário o papel `agente`. A tabela `pessoas` e o Custom Access Token Hook, que põe o papel dentro do token, vêm das migrações da arquitetura de referência. Confira que o hook está ligado em **Authentication** → **Hooks**. Depois, no **SQL Editor**, rode:
+
+   ```sql
+   insert into public.pessoas (id, papel) values ('<id do usuário agente>', 'agente');
+   ```
+
+   O id aparece na lista de **Users**. Sem essa linha, o token do agente sai sem papel, e o banco recusa tudo o que ele pedir.
+3. Grave os dados de entrada como segredos do Worker, dentro de `servidor-mcp/`. Cada comando pede o valor no terminal:
+
+```bash
+wrangler secret put SUPABASE_URL
+wrangler secret put SUPABASE_PUBLISHABLE_KEY
+wrangler secret put AGENTE_EMAIL
+wrangler secret put AGENTE_SENHA
+```
+
+O `SUPABASE_URL` e a chave publicável (`sb_publishable_...`) aparecem no botão **Connect**, no topo do projeto. A chave também fica em **Project Settings** → **API Keys**.
+
+Para testar na sua máquina, os mesmos quatro valores vão no arquivo `servidor-mcp/.dev.vars`, um por linha (`NOME=valor`). Esse arquivo não entra no git.
+
+### Testar na sua máquina
+
+Dentro de `servidor-mcp/`:
+
+```bash
+uv run pywrangler dev
+```
+
+O servidor sobe em `http://localhost:8787/mcp`.
+
+### Publicar
+
+A cada mudança:
+
+```bash
+uv run pywrangler deploy
+```
+
+O `pywrangler` usa o `wrangler` que a `setup-fde` já instalou, e a conta em que você entrou com o `wrangler login`. O servidor fica em:
+
+```
+https://ja-chegou-mcp.<subdominio-do-grupo>.workers.dev/mcp
+```
+
+Qualquer integrante convidado na conta da Cloudflare publica de novo do mesmo jeito.
+
+### Proteger com um token
+
+O exemplo não confere quem chama. Peça ao Claude Code para o servidor recusar a chamada sem o cabeçalho `Authorization: Bearer <token>` e grave o token como segredo do Worker, dentro de `servidor-mcp/`:
+
+```bash
+wrangler secret put MCP_TOKEN
+```
+
+Ele pede o valor no terminal. Gere um token longo e guarde no gerenciador de senhas do grupo.
+
+### Cada um liga o Claude Code
+
+Primeiro, ponha o token numa variável do terminal, sem que ele apareça na tela (cole e aperte Enter):
+
+```bash
+read -rs MCP_TOKEN
+```
+
+Depois:
+
+```bash
+claude mcp add --transport http ja-chegou \
+  https://ja-chegou-mcp.<subdominio-do-grupo>.workers.dev/mcp \
+  --header "Authorization: Bearer $MCP_TOKEN"
+```
+
+Abra o Claude Code e rode `/mcp`: o servidor `ja-chegou` precisa aparecer conectado.
+
+No plano gratuito, cada chamada tem 10 ms de CPU e o dia tem 100 mil chamadas ([limites](https://developers.cloudflare.com/workers/platform/pricing/)). Se uma chamada passar dos 10 ms, a Cloudflare corta e devolve o **erro 1102**. O tempo de CPU de cada chamada aparece no painel do Worker, em **Metrics**: se o 1102 aparecer, mostre esse número ao Claude Code para enxugar a tool.
+
 ## O que nunca entra no fork
 
 O fork é público. Nada disto entra em commit, no código ou em arquivo versionado:
 
 - a senha do banco do Supabase;
 - as chaves do projeto Supabase (a chave secreta e a `service_role`);
-- os tokens de API da Cloudflare.
+- os tokens de API da Cloudflare;
+- o `MCP_TOKEN` do servidor MCP e a senha do usuário `agente`.
 
 Elas ficam no seu gerenciador de senhas, nos secrets do Worker (`wrangler secret put`), nos secrets do repositório ou nos arquivos locais `.env` e `.dev.vars`, que não entram no git.
 
